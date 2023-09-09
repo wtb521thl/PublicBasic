@@ -26,6 +26,8 @@ namespace Tianbo.Wang
             }
 
             BtnClickAction(0);
+
+            SceneGoManager.Instance.SwitctToComputer();
         }
 
         public void BtnClickAction(int tempIndex)
