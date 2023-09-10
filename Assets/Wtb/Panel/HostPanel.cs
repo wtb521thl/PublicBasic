@@ -83,6 +83,11 @@ namespace Tianbo.Wang
 
         public void BtnClickAction(int tempIndex)
         {
+            if (tempIndex != 0 && !GameManager.Instance.isStudyMode)
+            {
+                return;
+            }
+            Debug.Log(tempIndex);
             switch (tempIndex)
             {
                 case 0:

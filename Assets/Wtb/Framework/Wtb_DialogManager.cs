@@ -8,8 +8,6 @@ namespace Tianbo.Wang
     public enum Wtb_DialogType
     {
         Wtb_TipsDialog,
-        Wtb_ListInfoDialog,
-        Wtb_SendCenterDialog,
     }
 
     /// <summary>
@@ -28,9 +26,9 @@ namespace Tianbo.Wang
             dialogPanel = GameObject.Find("DialogParent").transform;
         }
 
-        public Wtb_DialogBase OpenDialog(Wtb_DialogType dialogType, string source = "")
+        public Wtb_DialogBase OpenDialog(Wtb_DialogType dialogType, string source = "", bool canMultiplyOpen = false)
         {
-            if (openingDialogs.Count > 0 && openingDialogs.Peek().name == dialogType.ToString())
+            if (!canMultiplyOpen && openingDialogs.Count > 0 && openingDialogs.Peek().name == dialogType.ToString())
             {
                 return null;
             }
@@ -38,6 +36,7 @@ namespace Tianbo.Wang
             dialogObj.name = dialogType.ToString();
             Wtb_DialogBase tempDialog = dialogObj.GetComponent<Wtb_DialogBase>();
             tempDialog.source = source;
+            tempDialog.canOpenMultiply = canMultiplyOpen;
             openingDialogs.Push(tempDialog);
             Wtb_EventCenter.BroadcastEvent<string, bool>(Wtb_EventSendType.DialogChangeStateAction, dialogObj.name, true);
             return tempDialog;

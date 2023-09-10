@@ -25,6 +25,7 @@ namespace Tianbo.Wang
 
         public string source = "";
 
+        public bool canOpenMultiply = false;
         protected virtual void Awake()
         {
             Init();

@@ -32,10 +32,30 @@ namespace Tianbo.Wang
 
         public void BtnClickAction(int tempIndex)
         {
+            if (tempIndex != 0 && !GameManager.Instance.isStudyMode)
+            {
+                return;
+            }
+            Debug.Log(tempIndex);
             switch (tempIndex)
             {
                 case 0:
-
+                    SceneGoManager.Instance.连接显示器1();
+                    break;
+                case 1:
+                    SceneGoManager.Instance.连接电源1();
+                    break;
+                case 2:
+                    SceneGoManager.Instance.连接键盘1();
+                    break;
+                case 3:
+                    SceneGoManager.Instance.连接鼠标1();
+                    break;
+                case 4:
+                    SceneGoManager.Instance.连接网线1();
+                    break;
+                case 5:
+                    SceneGoManager.Instance.连接音响1();
                     break;
             }
         }
