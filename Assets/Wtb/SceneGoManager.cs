@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System;
+using HighlightingSystem;
 
 namespace Tianbo.Wang
 {
     public class SceneGoManager : Wtb_SingleMono<SceneGoManager>
     {
         public Action<string, bool> AddBagAction;
-        public Action ClearBagAction;
+        public Action<string> SetStepAction;
 
         public GameObject host;
         public GameObject computer;
@@ -132,11 +133,14 @@ namespace Tianbo.Wang
             ray = cam.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit))
             {
-                if (Input.GetMouseButtonDown(0))
+
+                #region 安装CPU
+                //打开CPU盖板
+                if (shouldClickCPU外壳Open)
                 {
-                    #region 安装CPU
-                    //打开CPU盖板
-                    if (shouldClickCPU外壳Open)
+                    HighlightObj(CPU外壳.gameObject);
+
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform == CPU外壳)
                         {
@@ -153,8 +157,14 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    //插上CPU
-                    if (shouldClickCPU插槽)
+
+                }
+                //插上CPU
+                if (shouldClickCPU插槽)
+                {
+                    HighlightObj(CPU插槽);
+
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform.gameObject == CPU插槽)
                         {
@@ -171,8 +181,15 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    //关闭CPU盖板
-                    if (shouldClickCPU外壳Close)
+
+
+                }
+                //关闭CPU盖板
+                if (shouldClickCPU外壳Close)
+                {
+                    HighlightObj(CPU外壳.gameObject);
+
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform == CPU外壳)
                         {
@@ -189,14 +206,20 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    #endregion
 
 
-                    #region 安装散热器
-                    //注射器注射硅脂
-                    if (shouldClickCPU硅脂注射器)
+                }
+                #endregion
+
+
+                #region 安装散热器
+                //注射器注射硅脂
+                if (shouldClickCPU硅脂注射器)
+                {
+                    HighlightObj(CPU硅脂注射器.gameObject);
+
+                    if (Input.GetMouseButtonDown(0))
                     {
-                        Debug.Log(hit.transform);
                         if (hit.transform == CPU硅脂注射器)
                         {
                             shouldClickCPU硅脂注射器 = false;
@@ -212,8 +235,15 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    //安装散热器
-                    if (shouldClickCPU散热器)
+
+
+                }
+                //安装散热器
+                if (shouldClickCPU散热器)
+                {
+                    HighlightObj(CPU外壳.gameObject);
+
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform == CPU外壳)
                         {
@@ -231,10 +261,17 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    #endregion
 
-                    #region 内存
-                    if (shouldClick内存插槽)
+
+                }
+                #endregion
+
+                #region 内存
+                if (shouldClick内存插槽)
+                {
+                    HighlightObj(内存条插槽);
+
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform.gameObject == 内存条插槽)
                         {
@@ -252,12 +289,18 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    #endregion
 
-                    #region 主板
-                    if (shouldClick主板)
+
+                }
+                #endregion
+
+                #region 主板
+                if (shouldClick主板)
+                {
+                    HighlightObj(主板.gameObject);
+
+                    if (Input.GetMouseButtonDown(0))
                     {
-                        Debug.Log(hit.transform);
                         if (hit.transform == 主板)
                         {
                             shouldClick主板 = false;
@@ -270,7 +313,14 @@ namespace Tianbo.Wang
                         }
                     }
 
-                    if (shouldClick主板插槽)
+
+                }
+
+                if (shouldClick主板插槽)
+                {
+                    HighlightObj(主板插槽);
+
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform.gameObject == 主板插槽)
                         {
@@ -288,10 +338,16 @@ namespace Tianbo.Wang
                         }
                     }
 
-                    #endregion
 
-                    #region 电源
-                    if (shouldClick电源插槽)
+                }
+
+                #endregion
+
+                #region 电源
+                if (shouldClick电源插槽)
+                {
+                    HighlightObj(电源插槽);
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform.gameObject == 电源插槽)
                         {
@@ -309,9 +365,15 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    #endregion
-                    #region 显卡
-                    if (shouldClick显卡插槽)
+
+
+                }
+                #endregion
+                #region 显卡
+                if (shouldClick显卡插槽)
+                {
+                    HighlightObj(显卡插槽);
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform.gameObject == 显卡插槽)
                         {
@@ -329,10 +391,16 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    #endregion
 
-                    #region 硬盘
-                    if (shouldClick硬盘插槽)
+
+                }
+                #endregion
+
+                #region 硬盘
+                if (shouldClick硬盘插槽)
+                {
+                    HighlightObj(硬盘插槽);
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform.gameObject == 硬盘插槽)
                         {
@@ -350,9 +418,15 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    #endregion
-                    #region 机箱盖
-                    if (shouldClick机箱盖插槽)
+
+
+                }
+                #endregion
+                #region 机箱盖
+                if (shouldClick机箱盖插槽)
+                {
+                    HighlightObj(机箱盖插槽);
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform.gameObject == 机箱盖插槽)
                         {
@@ -376,10 +450,16 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    #endregion
 
-                    #region 第二模块
-                    if (shouldConnect显示器1)
+
+                }
+                #endregion
+
+                #region 第二模块
+                if (shouldConnect显示器1)
+                {
+                    HighlightObj(DragPoint_显示器HDMI);
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform.gameObject == DragPoint_显示器HDMI)
                         {
@@ -392,9 +472,14 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    if (shouldConnect显示器2)
+
+
+                }
+                if (shouldConnect显示器2)
+                {
+                    HighlightObj(DragPoint_机箱HDMI);
+                    if (Input.GetMouseButtonDown(0))
                     {
-                        Debug.Log(hit.transform.gameObject);
                         if (hit.transform.gameObject == DragPoint_机箱HDMI)
                         {
                             shouldConnect显示器2 = false;
@@ -407,7 +492,13 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    if (shouldConnect电源1)
+
+
+                }
+                if (shouldConnect电源1)
+                {
+                    HighlightObj(DragPoint_机箱电源插孔);
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform.gameObject == DragPoint_机箱电源插孔)
                         {
@@ -420,7 +511,13 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    if (shouldConnect电源2)
+
+
+                }
+                if (shouldConnect电源2)
+                {
+                    HighlightObj(DragPoint_插排电源插座);
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform.gameObject == DragPoint_插排电源插座)
                         {
@@ -434,7 +531,11 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    if (shouldConnect键盘1)
+                }
+                if (shouldConnect键盘1)
+                {
+                    HighlightObj(DragPoint_键盘);
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform.gameObject == DragPoint_键盘)
                         {
@@ -447,7 +548,11 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    if (shouldConnect键盘2)
+                }
+                if (shouldConnect键盘2)
+                {
+                    HighlightObj(DragPoint_机箱USB);
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform.gameObject == DragPoint_机箱USB)
                         {
@@ -461,7 +566,11 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    if (shouldConnect鼠标1)
+                }
+                if (shouldConnect鼠标1)
+                {
+                    HighlightObj(DragPoint_鼠标);
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform.gameObject == DragPoint_鼠标)
                         {
@@ -474,7 +583,11 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    if (shouldConnect鼠标2)
+                }
+                if (shouldConnect鼠标2)
+                {
+                    HighlightObj(DragPoint_机箱USB);
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform.gameObject == DragPoint_机箱USB)
                         {
@@ -488,7 +601,11 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    if (shouldConnect网线1)
+                }
+                if (shouldConnect网线1)
+                {
+                    HighlightObj(DragPoint_机箱网线插孔);
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform.gameObject == DragPoint_机箱网线插孔)
                         {
@@ -501,7 +618,11 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    if (shouldConnect网线2)
+                }
+                if (shouldConnect网线2)
+                {
+                    HighlightObj(DragPoint_插排网线插座);
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform.gameObject == DragPoint_插排网线插座)
                         {
@@ -515,7 +636,11 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    if (shouldConnect音响1)
+                }
+                if (shouldConnect音响1)
+                {
+                    HighlightObj(DragPoint_音响);
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform.gameObject == DragPoint_音响)
                         {
@@ -528,7 +653,11 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-                    if (shouldConnect音响2)
+                }
+                if (shouldConnect音响2)
+                {
+                    HighlightObj(DragPoint_机箱USB);
+                    if (Input.GetMouseButtonDown(0))
                     {
                         if (hit.transform.gameObject == DragPoint_机箱USB)
                         {
@@ -546,12 +675,28 @@ namespace Tianbo.Wang
                             WrongTips();
                         }
                     }
-
-                    #endregion
                 }
+
+                #endregion
+
             }
 
         }
+
+        private void HighlightObj(GameObject highlightObj)
+        {
+            if (!GameManager.Instance.isStudyMode)
+            {
+                return;
+            }
+            Highlighter highlighter = highlightObj.GetComponent<Highlighter>();
+            if (highlighter == null)
+            {
+                highlighter = highlightObj.gameObject.AddComponent<Highlighter>();
+            }
+            highlighter.Hover(Color.yellow);
+        }
+
         Transform tempParent;
         void WrongTips()
         {
@@ -587,7 +732,7 @@ namespace Tianbo.Wang
 
         public void 设备拆除()
         {
-            ClearBagAction?.Invoke();
+            SetStepAction?.Invoke("设备拆除");
             cam.transform.position = cameraTrans.position;
             cam.transform.rotation = cameraTrans.rotation;
             Switch机箱盖(false, true);
@@ -631,6 +776,7 @@ namespace Tianbo.Wang
                                                     SwitchCPU外壳(false, false, () =>
                                                     {
                                                         Debug.Log("第一步动画完成");
+                                                        安装CPU();
                                                     });
                                                 });
                                             });
@@ -647,7 +793,7 @@ namespace Tianbo.Wang
 
         public void 安装CPU()
         {
-            ClearBagAction?.Invoke();
+            SetStepAction?.Invoke("安装CPU");
             AddBagAction?.Invoke("机箱盖", true);
             AddBagAction?.Invoke("硬盘", true);
             AddBagAction?.Invoke("显卡", true);
@@ -673,7 +819,7 @@ namespace Tianbo.Wang
 
         public void 安装散热器()
         {
-            ClearBagAction?.Invoke();
+            SetStepAction?.Invoke("安装 散热器");
             AddBagAction?.Invoke("机箱盖", true);
             AddBagAction?.Invoke("硬盘", true);
             AddBagAction?.Invoke("显卡", true);
@@ -697,7 +843,7 @@ namespace Tianbo.Wang
         }
         public void 安装内存()
         {
-            ClearBagAction?.Invoke();
+            SetStepAction?.Invoke("安装内存");
             AddBagAction?.Invoke("机箱盖", true);
             AddBagAction?.Invoke("硬盘", true);
             AddBagAction?.Invoke("显卡", true);
@@ -721,7 +867,7 @@ namespace Tianbo.Wang
 
         public void 安装主板()
         {
-            ClearBagAction?.Invoke();
+            SetStepAction?.Invoke("安装主板");
             AddBagAction?.Invoke("机箱盖", true);
             AddBagAction?.Invoke("硬盘", true);
             AddBagAction?.Invoke("显卡", true);
@@ -744,7 +890,7 @@ namespace Tianbo.Wang
 
         public void 安装电源()
         {
-            ClearBagAction?.Invoke();
+            SetStepAction?.Invoke("安装电源");
             AddBagAction?.Invoke("机箱盖", true);
             AddBagAction?.Invoke("硬盘", true);
             AddBagAction?.Invoke("显卡", true);
@@ -767,7 +913,7 @@ namespace Tianbo.Wang
 
         public void 安装显卡()
         {
-            ClearBagAction?.Invoke();
+            SetStepAction?.Invoke("安装 独立显卡");
             AddBagAction?.Invoke("机箱盖", true);
             AddBagAction?.Invoke("硬盘", true);
             AddBagAction?.Invoke("显卡", true);
@@ -788,7 +934,7 @@ namespace Tianbo.Wang
         }
         public void 安装硬盘()
         {
-            ClearBagAction?.Invoke();
+            SetStepAction?.Invoke("安装硬盘");
             AddBagAction?.Invoke("机箱盖", true);
             AddBagAction?.Invoke("硬盘", true);
             cam.transform.position = cameraTrans.position;
@@ -809,7 +955,7 @@ namespace Tianbo.Wang
 
         public void 安装机箱盖()
         {
-            ClearBagAction?.Invoke();
+            SetStepAction?.Invoke("安装机箱");
             AddBagAction?.Invoke("机箱盖", true);
             cam.transform.position = cameraTrans.position;
             cam.transform.rotation = cameraTrans.rotation;

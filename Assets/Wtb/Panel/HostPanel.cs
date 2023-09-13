@@ -33,33 +33,48 @@ namespace Tianbo.Wang
                 });
             }
             SceneGoManager.Instance.AddBagAction += AddBagAction;
-            SceneGoManager.Instance.ClearBagAction += ClearBagAction;
+            SceneGoManager.Instance.SetStepAction += ClearBagAction;
             SceneGoManager.Instance.SwitctToHost();
             SceneGoManager.Instance.设备拆除();
-            if (GameManager.Instance.isStudyMode)
-            {
-
-            }
 
         }
 
-        private void ClearBagAction()
+        private void ClearBagAction(string stepName)
         {
             for (int i = 0; i < items.Count; i++)
             {
                 Destroy(items[i].gameObject);
             }
             items.Clear();
-        }
 
+            for (int i = 0; i < btns.Length; i++)
+            {
+                if (btns[i].GetComponentInChildren<Text>().text == stepName)
+                {
+                    btns[i].transform.Find("SelectImage").GetComponent<Image>().enabled = true;
+                }
+                else
+                {
+                    btns[i].transform.Find("SelectImage").GetComponent<Image>().enabled = false;
+                }
+            }
+        }
+        Image lastSelectImage;
         private void AddBagAction(string arg1, bool arg2)
         {
             if (arg2)
             {
                 GameObject go = Instantiate(itemIcon, bagTrans);
                 go.SetActive(true);
+                go.GetComponentInChildren<Text>().text = arg1;
                 go.GetComponent<Button>().onClick.AddListener(() =>
                 {
+                    if (lastSelectImage != null)
+                    {
+                        lastSelectImage.enabled = false;
+                    }
+                    lastSelectImage = go.transform.Find("HoverImage").GetComponent<Image>();
+                    lastSelectImage.enabled = true;
                     SceneGoManager.Instance.ClickUIAction(go.name);
                 });
                 go.name = arg1;
@@ -129,7 +144,7 @@ namespace Tianbo.Wang
             }
 
             SceneGoManager.Instance.AddBagAction -= AddBagAction;
-            SceneGoManager.Instance.ClearBagAction -= ClearBagAction;
+            SceneGoManager.Instance.SetStepAction -= ClearBagAction;
         }
 
     }

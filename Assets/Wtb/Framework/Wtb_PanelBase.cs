@@ -14,6 +14,8 @@ namespace Tianbo.Wang
         public Button unFullScreenBtn;
 
         public Button returnBtn;
+        public Button homeBtn;
+        public Button reportBtn;
 
         protected virtual void Awake()
         {
@@ -29,6 +31,12 @@ namespace Tianbo.Wang
             {
                 returnBtn.onClick.AddListener(ReturnBtnClick);
                 BtnHoverBind(returnBtn.gameObject);
+            }
+
+            if (homeBtn != null)
+            {
+                homeBtn.onClick.AddListener(HomeBtnClick);
+                BtnHoverBind(homeBtn.gameObject);
             }
         }
 
@@ -91,6 +99,11 @@ namespace Tianbo.Wang
         public virtual void ReturnBtnClick()
         {
             Wtb_PanelManager.Instance.ClosePanel();
+        }
+
+        public virtual void HomeBtnClick()
+        {
+            Wtb_PanelManager.Instance.BackToPanel(PanelType.MainPanel);
         }
     }
 }
