@@ -128,12 +128,27 @@ namespace Tianbo.Wang
         Ray ray;
         RaycastHit hit;
         public Camera cam;
+        RectTransform canvasTrans;
+        //GameObject ooo;
         void Update()
         {
-            ray = cam.ScreenPointToRay(Input.mousePosition);
+            if (canvasTrans == null)
+            {
+                canvasTrans = GameObject.Find("Canvas").GetComponent<RectTransform>();
+            }
+            float xP = (float)Screen.width /1920f;
+            float yP = (float)Screen.height /1080f;
+
+            Vector2 finalPoint = new Vector2(Input.mousePosition.x / xP, Input.mousePosition.y / yP);
+
+            ray = cam.ScreenPointToRay(finalPoint);
             if (Physics.Raycast(ray, out hit))
             {
-
+                //if (ooo == null)
+                //    ooo = GameObject.CreatePrimitive(PrimitiveType.Cube) ;
+                //ooo.transform.localScale = Vector3.one * 0.1f;
+                //ooo.transform.position = hit.point;
+                //ooo.layer = 2;
                 #region 安装CPU
                 //打开CPU盖板
                 if (shouldClickCPU外壳Open)
@@ -456,6 +471,7 @@ namespace Tianbo.Wang
                 #endregion
 
                 #region 第二模块
+
                 if (shouldConnect显示器1)
                 {
                     HighlightObj(DragPoint_显示器HDMI);
@@ -1239,8 +1255,6 @@ namespace Tianbo.Wang
         #region 第二模块
         void InitSecond()
         {
-
-
             shouldConnect显示器1 = false;
             shouldConnect显示器2 = false;
             shouldConnect电源1 = false;
@@ -1261,6 +1275,7 @@ namespace Tianbo.Wang
             cam.transform.rotation = 显示器CamTrans.rotation;
             InitSecond();
             shouldConnect显示器1 = true;
+            SetStepAction?.Invoke("连接 显示器");
         }
         public void 连接显示器2()
         {
@@ -1275,6 +1290,7 @@ namespace Tianbo.Wang
             cam.transform.rotation = 机箱CamTrans.rotation;
             InitSecond();
             shouldConnect电源1 = true;
+            SetStepAction?.Invoke("连接电源");
         }
         public void 连接电源2()
         {
@@ -1289,6 +1305,7 @@ namespace Tianbo.Wang
             cam.transform.position = 键盘鼠标CamTrans.position;
             cam.transform.rotation = 键盘鼠标CamTrans.rotation;
             shouldConnect键盘1 = true;
+            SetStepAction?.Invoke("连接键盘");
         }
         public void 连接键盘2()
         {
@@ -1303,6 +1320,7 @@ namespace Tianbo.Wang
             cam.transform.rotation = 键盘鼠标CamTrans.rotation;
             InitSecond();
             shouldConnect鼠标1 = true;
+            SetStepAction?.Invoke("连接鼠标");
         }
         public void 连接鼠标2()
         {
@@ -1317,6 +1335,7 @@ namespace Tianbo.Wang
             cam.transform.rotation = 机箱CamTrans.rotation;
             InitSecond();
             shouldConnect网线1 = true;
+            SetStepAction?.Invoke("连接网线");
         }
         public void 连接网线2()
         {
@@ -1331,6 +1350,7 @@ namespace Tianbo.Wang
             cam.transform.rotation = 音响CamTrans.rotation;
             InitSecond();
             shouldConnect音响1 = true;
+            SetStepAction?.Invoke("连接音响");
         }
         public void 连接音响2()
         {

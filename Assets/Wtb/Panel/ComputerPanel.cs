@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 
 namespace Tianbo.Wang
 {
@@ -14,6 +9,8 @@ namespace Tianbo.Wang
         protected override void Awake()
         {
             base.Awake();
+            SceneGoManager.Instance.SetStepAction += SetStepAction;
+
             for (int i = 0; i < btns.Length; i++)
             {
                 int tempIndex = i;
@@ -24,10 +21,23 @@ namespace Tianbo.Wang
                     BtnClickAction(tempIndex);
                 });
             }
-
-            BtnClickAction(0);
-
             SceneGoManager.Instance.SwitctToComputer();
+            BtnClickAction(0);
+        }
+
+        private void SetStepAction(string stepName)
+        {
+            for (int i = 0; i < btns.Length; i++)
+            {
+                if (btns[i].GetComponentInChildren<Text>().text == stepName)
+                {
+                    btns[i].transform.Find("SelectImage").GetComponent<Image>().enabled = true;
+                }
+                else
+                {
+                    btns[i].transform.Find("SelectImage").GetComponent<Image>().enabled = false;
+                }
+            }
         }
 
         public void BtnClickAction(int tempIndex)
@@ -36,7 +46,6 @@ namespace Tianbo.Wang
             {
                 return;
             }
-            Debug.Log(tempIndex);
             switch (tempIndex)
             {
                 case 0:
@@ -67,6 +76,8 @@ namespace Tianbo.Wang
             {
                 BtnHoverUnBind(btns[i].gameObject);
             }
+
+            SceneGoManager.Instance.SetStepAction -= SetStepAction;
         }
 
     }

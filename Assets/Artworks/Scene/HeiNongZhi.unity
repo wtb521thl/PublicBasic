@@ -3155,7 +3155,7 @@ PrefabInstance:
     - target: {fileID: 2663530977740371835, guid: a54bbb4215216de419ba574f374a0291,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2663530977740371836, guid: a54bbb4215216de419ba574f374a0291,
         type: 3}
@@ -18587,6 +18587,7 @@ GameObject:
   - component: {fileID: 9130844792323621011}
   - component: {fileID: 9130844792322293897}
   - component: {fileID: 9130844792321328841}
+  - component: {fileID: 9130844792323527860}
   m_Layer: 0
   m_Name: Shiyanshi_Wuding
   m_TagString: Untagged
@@ -18594,6 +18595,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
+--- !u!64 &9130844792323527860
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9130844792323527859}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300002, guid: a11bec315583bbc45985ca399555b52b, type: 3}
 --- !u!1 &9130844792323527861
 GameObject:
   m_ObjectHideFlags: 0
@@ -19281,6 +19296,7 @@ GameObject:
   - component: {fileID: 9130844792323621025}
   - component: {fileID: 9130844792322293893}
   - component: {fileID: 9130844792321328837}
+  - component: {fileID: 9130844792323528002}
   m_Layer: 0
   m_Name: Shiyanshi_XiaoNeiqiang
   m_TagString: Untagged
@@ -19288,6 +19304,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
+--- !u!64 &9130844792323528002
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9130844792323528001}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300018, guid: a11bec315583bbc45985ca399555b52b, type: 3}
 --- !u!1 &9130844792323528003
 GameObject:
   m_ObjectHideFlags: 0
@@ -19315,6 +19345,7 @@ GameObject:
   - component: {fileID: 9130844792323621029}
   - component: {fileID: 9130844792322293895}
   - component: {fileID: 9130844792321328839}
+  - component: {fileID: 9130844792323528006}
   m_Layer: 0
   m_Name: Shiyanshi_XiaoNeiqiang 1
   m_TagString: Untagged
@@ -19322,6 +19353,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
+--- !u!64 &9130844792323528006
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9130844792323528005}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300022, guid: a11bec315583bbc45985ca399555b52b, type: 3}
 --- !u!1 &9130844792323528007
 GameObject:
   m_ObjectHideFlags: 0
@@ -19333,6 +19378,7 @@ GameObject:
   - component: {fileID: 9130844792323621031}
   - component: {fileID: 9130844792322293913}
   - component: {fileID: 9130844792321328857}
+  - component: {fileID: 9130844792323528008}
   m_Layer: 0
   m_Name: Shiyanshi_XiaoNeiqiang 2
   m_TagString: Untagged
@@ -19340,6 +19386,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
+--- !u!64 &9130844792323528008
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9130844792323528007}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300020, guid: a11bec315583bbc45985ca399555b52b, type: 3}
 --- !u!1 &9130844792323528009
 GameObject:
   m_ObjectHideFlags: 0
@@ -19387,6 +19447,7 @@ GameObject:
   - component: {fileID: 9130844792323621037}
   - component: {fileID: 9130844792322293889}
   - component: {fileID: 9130844792321328833}
+  - component: {fileID: 9130844792323528014}
   m_Layer: 0
   m_Name: Shiyanshi_Xiaobolimenkung 3
   m_TagString: Untagged
@@ -19394,6 +19455,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
+--- !u!64 &9130844792323528014
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9130844792323528013}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300008, guid: a11bec315583bbc45985ca399555b52b, type: 3}
 --- !u!1 &9130844792323528015
 GameObject:
   m_ObjectHideFlags: 0
@@ -19405,6 +19480,7 @@ GameObject:
   - component: {fileID: 9130844792323621039}
   - component: {fileID: 9130844792322293891}
   - component: {fileID: 9130844792321328835}
+  - component: {fileID: 9130844792323528016}
   m_Layer: 0
   m_Name: Shiyanshi_Xiaobolimenkung 4
   m_TagString: Untagged
@@ -19412,6 +19488,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
+--- !u!64 &9130844792323528016
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9130844792323528015}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300006, guid: a11bec315583bbc45985ca399555b52b, type: 3}
 --- !u!1 &9130844792323528025
 GameObject:
   m_ObjectHideFlags: 0
@@ -19423,6 +19513,7 @@ GameObject:
   - component: {fileID: 9130844792323621049}
   - component: {fileID: 9130844792322293915}
   - component: {fileID: 9130844792321328859}
+  - component: {fileID: 9130844792323528026}
   m_Layer: 0
   m_Name: Shiyanshi_XiaoNeiqiang 3
   m_TagString: Untagged
@@ -19430,6 +19521,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
   m_IsActive: 1
+--- !u!64 &9130844792323528026
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9130844792323528025}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300016, guid: a11bec315583bbc45985ca399555b52b, type: 3}
 --- !u!1 &9130844792323528027
 GameObject:
   m_ObjectHideFlags: 0

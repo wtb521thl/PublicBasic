@@ -65,6 +65,12 @@ namespace Tianbo.Wang
             if (arg2)
             {
                 GameObject go = Instantiate(itemIcon, bagTrans);
+                Debug.Log(arg1);
+                Sprite sprite = Resources.Load<Sprite>("截图/" + arg1);
+                Image image = go.transform.Find("Sprite").GetComponent<Image>();
+                image.sprite = sprite;
+                RectTransform tempRect = image.rectTransform;
+                tempRect.sizeDelta = new Vector2(tempRect.sizeDelta.x, (float)sprite.texture.height / sprite.texture.width * tempRect.sizeDelta.x);
                 go.SetActive(true);
                 go.GetComponentInChildren<Text>().text = arg1;
                 go.GetComponent<Button>().onClick.AddListener(() =>
