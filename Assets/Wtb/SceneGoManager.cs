@@ -25,6 +25,7 @@ namespace Tianbo.Wang
         public Transform 电源;
         public Transform 显卡;
         public Transform 硬盘;
+        public Transform 硬盘盖;
         public Transform 机箱盖;
 
         public GameObject CPU插槽;
@@ -37,7 +38,18 @@ namespace Tianbo.Wang
 
 
         public Transform cameraTrans;
+        /// <summary>
+        /// 远处的起始点
+        /// </summary>
+        public Transform cameraTransFar;
         public Transform 安装CPUCameraPoint;
+        public Transform 安装散热器CameraPoint;
+        public Transform 安装散热硅脂CameraPoint;
+        public Transform 安装内存条CameraPoint;
+        public Transform 安装主板CameraPoint;
+        public Transform 安装电源CameraPoint;
+        public Transform 安装显卡CameraPoint;
+        public Transform 安装硬盘CameraPoint;
 
 
         public GameObject 显示器线;
@@ -53,6 +65,13 @@ namespace Tianbo.Wang
         public Transform 键盘鼠标CamTrans;
         public Transform 网线CamTrans;
         public Transform 音响CamTrans;
+
+        public Transform 显示器机箱线CamTrans;
+        public Transform 机箱电源线CamTrans;
+
+        public Transform 键盘鼠标机箱线CamTrans;
+        public Transform 网线机箱线CamTrans;
+        public Transform 音响机箱线CamTrans;
 
         public GameObject DragPoint_鼠标;
         public GameObject DragPoint_键盘;
@@ -136,8 +155,8 @@ namespace Tianbo.Wang
             {
                 canvasTrans = GameObject.Find("Canvas").GetComponent<RectTransform>();
             }
-            float xP = (float)Screen.width /1920f;
-            float yP = (float)Screen.height /1080f;
+            float xP = (float)Screen.width / 1920f;
+            float yP = (float)Screen.height / 1080f;
 
             Vector2 finalPoint = new Vector2(Input.mousePosition.x / xP, Input.mousePosition.y / yP);
 
@@ -160,7 +179,7 @@ namespace Tianbo.Wang
                         if (hit.transform == CPU外壳)
                         {
                             shouldClickCPU外壳Open = false;
-                            SwitchCPU外壳(true, false, () =>
+                            SwitchCPU外壳(true, false, false, () =>
                             {
                                 //此时应该去选中UI里面的CPU，选中后调用 “点击了CPU的UI() ”方法
                                 shouldClickCPUUI = true;
@@ -209,7 +228,7 @@ namespace Tianbo.Wang
                         if (hit.transform == CPU外壳)
                         {
                             shouldClickCPU外壳Close = false;
-                            SwitchCPU外壳(false, false, () =>
+                            SwitchCPU外壳(false, false, true, () =>
                             {
                                 //进入下一步骤
                                 安装散热器();
@@ -237,6 +256,8 @@ namespace Tianbo.Wang
                     {
                         if (hit.transform == CPU硅脂注射器)
                         {
+                            cam.transform.DOMove(安装散热器CameraPoint.position, 1f);
+                            cam.transform.DORotate(安装散热器CameraPoint.localEulerAngles, 1f);
                             shouldClickCPU硅脂注射器 = false;
                             SwitchCPU硅脂(true, false, () =>
                             {
@@ -293,6 +314,35 @@ namespace Tianbo.Wang
                             AddBagAction?.Invoke("内存", false);
                             shouldClick内存插槽 = false;
                             Switch内存(false, false, () =>
+                            {
+                                //下一模块
+                                安装硬盘();
+
+                            });
+                        }
+                        else
+                        {
+                            //错误提示
+                            WrongTips();
+                        }
+                    }
+
+
+                }
+                #endregion
+
+
+                #region 硬盘
+                if (shouldClick硬盘插槽)
+                {
+                    HighlightObj(硬盘插槽);
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        if (hit.transform.gameObject == 硬盘插槽)
+                        {
+                            AddBagAction?.Invoke("硬盘", false);
+                            shouldClick硬盘插槽 = false;
+                            Switch硬盘(false, false, () =>
                             {
                                 //下一模块
                                 安装主板();
@@ -397,33 +447,6 @@ namespace Tianbo.Wang
                             Switch显卡(false, false, () =>
                             {
                                 //下一模块
-                                安装硬盘();
-                            });
-                        }
-                        else
-                        {
-                            //错误提示
-                            WrongTips();
-                        }
-                    }
-
-
-                }
-                #endregion
-
-                #region 硬盘
-                if (shouldClick硬盘插槽)
-                {
-                    HighlightObj(硬盘插槽);
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        if (hit.transform.gameObject == 硬盘插槽)
-                        {
-                            AddBagAction?.Invoke("硬盘", false);
-                            shouldClick硬盘插槽 = false;
-                            Switch硬盘(false, false, () =>
-                            {
-                                //下一模块
                                 安装机箱盖();
                             });
                         }
@@ -437,6 +460,7 @@ namespace Tianbo.Wang
 
                 }
                 #endregion
+
                 #region 机箱盖
                 if (shouldClick机箱盖插槽)
                 {
@@ -500,7 +524,15 @@ namespace Tianbo.Wang
                         {
                             shouldConnect显示器2 = false;
                             显示器线.SetActive(true);
-                            连接电源1();
+
+                            cam.transform.DOMove(显示器机箱线CamTrans.position, 1f);
+                            cam.transform.DORotate(显示器机箱线CamTrans.localEulerAngles, 1f);
+
+                            HighlightObjAutoOff(显示器线, () =>
+                            {
+                                连接电源1();
+                            });
+
                         }
                         else
                         {
@@ -538,8 +570,17 @@ namespace Tianbo.Wang
                         if (hit.transform.gameObject == DragPoint_插排电源插座)
                         {
                             shouldConnect电源2 = false;
+
+                            cam.transform.DOMove(机箱电源线CamTrans.position, 1f);
+                            cam.transform.DORotate(机箱电源线CamTrans.localEulerAngles, 1f);
                             机箱电源线.SetActive(true);
-                            连接键盘1();
+
+                            HighlightObjAutoOff(机箱电源线, () =>
+                            {
+                                连接键盘1();
+                            });
+
+
                         }
                         else
                         {
@@ -573,8 +614,15 @@ namespace Tianbo.Wang
                         if (hit.transform.gameObject == DragPoint_机箱USB)
                         {
                             shouldConnect键盘2 = false;
+                            cam.transform.DOMove(键盘鼠标机箱线CamTrans.position, 1f);
+                            cam.transform.DORotate(键盘鼠标机箱线CamTrans.localEulerAngles, 1f);
                             键盘线.SetActive(true);
-                            连接鼠标1();
+
+                            HighlightObjAutoOff(键盘线, () =>
+                            {
+                                连接鼠标1();
+                            });
+
                         }
                         else
                         {
@@ -608,8 +656,16 @@ namespace Tianbo.Wang
                         if (hit.transform.gameObject == DragPoint_机箱USB)
                         {
                             shouldConnect鼠标2 = false;
+                            cam.transform.DOMove(键盘鼠标机箱线CamTrans.position, 1f);
+                            cam.transform.DORotate(键盘鼠标机箱线CamTrans.localEulerAngles, 1f);
                             鼠标线.SetActive(true);
-                            连接网线1();
+
+                            HighlightObjAutoOff(鼠标线, () =>
+                            {
+                                连接网线1();
+                            });
+                        
+
                         }
                         else
                         {
@@ -643,8 +699,15 @@ namespace Tianbo.Wang
                         if (hit.transform.gameObject == DragPoint_插排网线插座)
                         {
                             shouldConnect网线2 = false;
+                            cam.transform.DOMove(网线机箱线CamTrans.position, 1f);
+                            cam.transform.DORotate(网线机箱线CamTrans.localEulerAngles, 1f);
                             网线.SetActive(true);
-                            连接音响1();
+                            HighlightObjAutoOff(网线, () =>
+                            {
+                                连接音响1();
+                            });
+           
+                     
                         }
                         else
                         {
@@ -677,13 +740,22 @@ namespace Tianbo.Wang
                     {
                         if (hit.transform.gameObject == DragPoint_机箱USB)
                         {
-                            音响线.SetActive(true);
                             shouldConnect音响2 = false;
-                            Wtb_TipsDialog wtb_TipsDialog = (Wtb_TipsDialog)Wtb_DialogManager.Instance.OpenDialog(Wtb_DialogType.Wtb_TipsDialog);
-                            wtb_TipsDialog.SetTipsInfo("完成当前模块", () =>
+
+                            cam.transform.DOMove(音响机箱线CamTrans.position, 1f);
+                            cam.transform.DORotate(音响机箱线CamTrans.localEulerAngles, 1f);
+                            音响线.SetActive(true);
+                            HighlightObjAutoOff(音响线, () =>
                             {
-                                Wtb_PanelManager.Instance.BackToPanel(PanelType.SelectModePanel);
+                                Wtb_TipsDialog wtb_TipsDialog = (Wtb_TipsDialog)Wtb_DialogManager.Instance.OpenDialog(Wtb_DialogType.Wtb_TipsDialog);
+                                wtb_TipsDialog.SetTipsInfo("完成当前模块", () =>
+                                {
+                                    Wtb_PanelManager.Instance.BackToPanel(PanelType.SelectModePanel);
+                                });
                             });
+
+
+     
                         }
                         else
                         {
@@ -711,6 +783,29 @@ namespace Tianbo.Wang
                 highlighter = highlightObj.gameObject.AddComponent<Highlighter>();
             }
             highlighter.Hover(Color.yellow);
+        }
+
+        private void HighlightObjAutoOff(GameObject highlightObj, Action FinishAction)
+        {
+            Highlighter highlighter = highlightObj.GetComponent<Highlighter>();
+            if (highlighter == null)
+            {
+                highlighter = highlightObj.gameObject.AddComponent<Highlighter>();
+            }
+            highlighter.ConstantOnImmediate(Color.green);
+            highlighter.TweenStart();
+            StartCoroutine(WaitClose(() =>
+            {
+                highlighter.TweenStop();
+                highlighter.ConstantOffImmediate();
+                FinishAction?.Invoke();
+            }));
+
+        }
+        IEnumerator WaitClose(Action FinishAction)
+        {
+            yield return new WaitForSeconds(2);
+            FinishAction?.Invoke();
         }
 
         Transform tempParent;
@@ -748,26 +843,31 @@ namespace Tianbo.Wang
 
         public void 设备拆除()
         {
-            SetStepAction?.Invoke("设备拆除");
-            cam.transform.position = cameraTrans.position;
-            cam.transform.rotation = cameraTrans.rotation;
-            Switch机箱盖(false, true);
-            Switch硬盘(false, true);
-            Switch显卡(false, true);
-            Switch电源(false, true);
-            Switch主板(false, true);
-            Switch内存(false, true);
-            Switch散热器(false, true);
-            SwitchCPU(false, true);
-            SwitchCPU外壳(false, true);
-            SwitchCPU硅脂(false, true);
 
-            Switch机箱盖(true, false, () =>
+            SetStepAction?.Invoke("设备拆除");
+
+            cam.transform.DOKill();
+            cam.transform.position = cameraTransFar.position;
+            cam.transform.rotation = cameraTransFar.rotation;
+            cam.transform.DOMove(cameraTrans.position, 1f);
+            cam.transform.DORotate(cameraTrans.localEulerAngles, 1f).OnComplete(() =>
             {
-                AddBagAction?.Invoke("机箱盖", true);
-                Switch硬盘(true, false, () =>
+
+                Switch机箱盖(false, true);
+                Switch硬盘(false, true);
+                Switch显卡(false, true);
+                Switch电源(false, true);
+                Switch主板(false, true);
+                Switch内存(false, true);
+                Switch散热器(false, true);
+                SwitchCPU(false, true);
+                SwitchCPU外壳(false, true);
+                SwitchCPU硅脂(false, true);
+
+                Switch机箱盖(true, false, () =>
                 {
-                    AddBagAction?.Invoke("硬盘", true);
+                    AddBagAction?.Invoke("机箱盖", true);
+
                     Switch显卡(true, false, () =>
                     {
                         AddBagAction?.Invoke("显卡", true);
@@ -776,7 +876,10 @@ namespace Tianbo.Wang
                             AddBagAction?.Invoke("电源", true);
                             Switch主板(true, false, () =>
                             {
-                                Switch内存(true, false, () =>
+                                Switch硬盘(true, false, () =>
+                                {
+                                    AddBagAction?.Invoke("硬盘", true);
+                                    Switch内存(true, false, () =>
                                 {
                                     AddBagAction?.Invoke("内存", true);
                                     Switch散热器(true, false, () =>
@@ -784,12 +887,12 @@ namespace Tianbo.Wang
                                         AddBagAction?.Invoke("散热器", true);
                                         SwitchCPU硅脂(false, false, () =>
                                         {
-                                            SwitchCPU外壳(true, false, () =>
+                                            SwitchCPU外壳(true, false, false, () =>
                                             {
                                                 SwitchCPU(true, false, () =>
                                                 {
                                                     AddBagAction?.Invoke("CPU", true);
-                                                    SwitchCPU外壳(false, false, () =>
+                                                    SwitchCPU外壳(false, false, false, () =>
                                                     {
                                                         Debug.Log("第一步动画完成");
                                                         安装CPU();
@@ -800,25 +903,33 @@ namespace Tianbo.Wang
 
                                     });
                                 });
+                                });
                             });
                         });
                     });
                 });
+
             });
+
         }
 
         public void 安装CPU()
         {
             SetStepAction?.Invoke("安装CPU");
             AddBagAction?.Invoke("机箱盖", true);
-            AddBagAction?.Invoke("硬盘", true);
             AddBagAction?.Invoke("显卡", true);
             AddBagAction?.Invoke("电源", true);
+            AddBagAction?.Invoke("硬盘", true);
             AddBagAction?.Invoke("内存", true);
             AddBagAction?.Invoke("散热器", true);
             AddBagAction?.Invoke("CPU", true);
-            cam.transform.position = 安装CPUCameraPoint.position;
-            cam.transform.rotation = 安装CPUCameraPoint.rotation;
+
+
+            cam.transform.DOMove(安装CPUCameraPoint.position, 1f);
+            cam.transform.DORotate(安装CPUCameraPoint.localEulerAngles, 1f);
+
+            //cam.transform.position = 安装CPUCameraPoint.position;
+            //cam.transform.rotation = 安装CPUCameraPoint.rotation;
             Switch机箱盖(true, true);
             Switch硬盘(true, true);
             Switch显卡(true, true);
@@ -837,13 +948,18 @@ namespace Tianbo.Wang
         {
             SetStepAction?.Invoke("安装 散热器");
             AddBagAction?.Invoke("机箱盖", true);
-            AddBagAction?.Invoke("硬盘", true);
             AddBagAction?.Invoke("显卡", true);
             AddBagAction?.Invoke("电源", true);
+            AddBagAction?.Invoke("硬盘", true);
             AddBagAction?.Invoke("内存", true);
             AddBagAction?.Invoke("散热器", true);
-            cam.transform.position = 安装CPUCameraPoint.position;
-            cam.transform.rotation = 安装CPUCameraPoint.rotation;
+
+            cam.transform.DOMove(安装散热硅脂CameraPoint.position, 1f);
+            cam.transform.DORotate(安装散热硅脂CameraPoint.localEulerAngles, 1f);
+
+
+            //cam.transform.position = 安装散热器CameraPoint.position;
+            //cam.transform.rotation = 安装散热器CameraPoint.rotation;
             Switch机箱盖(true, true);
             Switch硬盘(true, true);
             Switch显卡(true, true);
@@ -861,12 +977,15 @@ namespace Tianbo.Wang
         {
             SetStepAction?.Invoke("安装内存");
             AddBagAction?.Invoke("机箱盖", true);
-            AddBagAction?.Invoke("硬盘", true);
             AddBagAction?.Invoke("显卡", true);
             AddBagAction?.Invoke("电源", true);
+            AddBagAction?.Invoke("硬盘", true);
             AddBagAction?.Invoke("内存", true);
-            cam.transform.position = 安装CPUCameraPoint.position;
-            cam.transform.rotation = 安装CPUCameraPoint.rotation;
+
+            cam.transform.DOMove(安装内存条CameraPoint.position, 1f);
+            cam.transform.DORotate(安装内存条CameraPoint.localEulerAngles, 1f);
+            //cam.transform.position = 安装内存条CameraPoint.position;
+            //cam.transform.rotation = 安装内存条CameraPoint.rotation;
             Switch机箱盖(true, true);
             Switch硬盘(true, true);
             Switch显卡(true, true);
@@ -880,16 +999,45 @@ namespace Tianbo.Wang
             Init();
             shouldClick内存UI = true;
         }
+        public void 安装硬盘()
+        {
+            SetStepAction?.Invoke("安装硬盘");
+            AddBagAction?.Invoke("机箱盖", true);
+            AddBagAction?.Invoke("显卡", true);
+            AddBagAction?.Invoke("电源", true);
+            AddBagAction?.Invoke("硬盘", true);
+
+            cam.transform.DOMove(安装硬盘CameraPoint.position, 1f);
+            cam.transform.DORotate(安装硬盘CameraPoint.localEulerAngles, 1f);
+            //cam.transform.position = cameraTrans.position;
+            //cam.transform.rotation = cameraTrans.rotation;
+            Switch机箱盖(true, true);
+            Switch显卡(true, true);
+            Switch电源(true, true);
+            Switch主板(true, true);
+            Switch硬盘(true, true);
+            Switch内存(false, true);
+            Switch散热器(false, true);
+            SwitchCPU(false, true);
+            SwitchCPU外壳(false, true);
+            SwitchCPU硅脂(true, true);
+            Init();
+            shouldClick硬盘UI = true;
+        }
 
         public void 安装主板()
         {
             SetStepAction?.Invoke("安装主板");
             AddBagAction?.Invoke("机箱盖", true);
-            AddBagAction?.Invoke("硬盘", true);
             AddBagAction?.Invoke("显卡", true);
             AddBagAction?.Invoke("电源", true);
-            cam.transform.position = cameraTrans.position;
-            cam.transform.rotation = cameraTrans.rotation;
+            AddBagAction?.Invoke("硬盘", true);
+
+
+            cam.transform.DOMove(安装主板CameraPoint.position, 1f);
+            cam.transform.DORotate(安装主板CameraPoint.localEulerAngles, 1f);
+            //cam.transform.position = cameraTrans.position;
+            //cam.transform.rotation = cameraTrans.rotation;
             Switch机箱盖(true, true);
             Switch硬盘(true, true);
             Switch显卡(true, true);
@@ -908,11 +1056,14 @@ namespace Tianbo.Wang
         {
             SetStepAction?.Invoke("安装电源");
             AddBagAction?.Invoke("机箱盖", true);
-            AddBagAction?.Invoke("硬盘", true);
             AddBagAction?.Invoke("显卡", true);
             AddBagAction?.Invoke("电源", true);
-            cam.transform.position = cameraTrans.position;
-            cam.transform.rotation = cameraTrans.rotation;
+
+            cam.transform.DOMove(安装电源CameraPoint.position, 1f);
+            cam.transform.DORotate(安装电源CameraPoint.localEulerAngles, 1f);
+
+            //cam.transform.position = cameraTrans.position;
+            //cam.transform.rotation = cameraTrans.rotation;
             Switch机箱盖(true, true);
             Switch硬盘(true, true);
             Switch显卡(true, true);
@@ -931,10 +1082,12 @@ namespace Tianbo.Wang
         {
             SetStepAction?.Invoke("安装 独立显卡");
             AddBagAction?.Invoke("机箱盖", true);
-            AddBagAction?.Invoke("硬盘", true);
             AddBagAction?.Invoke("显卡", true);
-            cam.transform.position = cameraTrans.position;
-            cam.transform.rotation = cameraTrans.rotation;
+
+            cam.transform.DOMove(安装显卡CameraPoint.position, 1f);
+            cam.transform.DORotate(安装显卡CameraPoint.localEulerAngles, 1f);
+            //cam.transform.position = cameraTrans.position;
+            //cam.transform.rotation = cameraTrans.rotation;
             Switch机箱盖(true, true);
             Switch硬盘(true, true);
             Switch显卡(true, true);
@@ -948,33 +1101,17 @@ namespace Tianbo.Wang
             Init();
             shouldClick显卡UI = true;
         }
-        public void 安装硬盘()
-        {
-            SetStepAction?.Invoke("安装硬盘");
-            AddBagAction?.Invoke("机箱盖", true);
-            AddBagAction?.Invoke("硬盘", true);
-            cam.transform.position = cameraTrans.position;
-            cam.transform.rotation = cameraTrans.rotation;
-            Switch机箱盖(true, true);
-            Switch硬盘(true, true);
-            Switch显卡(false, true);
-            Switch电源(false, true);
-            Switch主板(false, true);
-            Switch内存(false, true);
-            Switch散热器(false, true);
-            SwitchCPU(false, true);
-            SwitchCPU外壳(false, true);
-            SwitchCPU硅脂(true, true);
-            Init();
-            shouldClick硬盘UI = true;
-        }
+
 
         public void 安装机箱盖()
         {
             SetStepAction?.Invoke("安装机箱");
             AddBagAction?.Invoke("机箱盖", true);
-            cam.transform.position = cameraTrans.position;
-            cam.transform.rotation = cameraTrans.rotation;
+
+            cam.transform.DOMove(cameraTrans.position, 1f);
+            cam.transform.DORotate(cameraTrans.localEulerAngles, 1f);
+            //cam.transform.position = cameraTrans.position;
+            //cam.transform.rotation = cameraTrans.rotation;
             Switch机箱盖(true, true);
             Switch硬盘(false, true);
             Switch显卡(false, true);
@@ -1061,19 +1198,7 @@ namespace Tianbo.Wang
             else
                 机箱盖.DOLocalMove(endPos, animTime).OnComplete(() => { FinishAction?.Invoke(); });
         }
-        public void Switch硬盘(bool open, bool rightNow, Action FinishAction = null)
-        {
-            硬盘.DOKill();
-            Vector3 endPos;
-            if (open)
-                endPos = new Vector3(1, -0.002705038f, 0.03184646f);
-            else
-                endPos = new Vector3(0.1333502f, -0.002705038f, 0.03184646f);
-            if (rightNow)
-                硬盘.localPosition = endPos;
-            else
-                硬盘.DOLocalMove(endPos, animTime).OnComplete(() => { FinishAction?.Invoke(); });
-        }
+
 
         public void Switch显卡(bool open, bool rightNow, Action FinishAction = null)
         {
@@ -1142,6 +1267,48 @@ namespace Tianbo.Wang
             }
 
         }
+        public void Switch硬盘(bool open, bool rightNow, Action FinishAction = null)
+        {
+            硬盘.DOKill();
+            硬盘盖.DOKill();
+            Vector3 endPos;
+            Vector3 endPosgaizi;
+            if (open)
+            {
+                endPosgaizi = new Vector3(1.44f, 0.189f, -0.1783336f);
+                endPos = new Vector3(1.396f, 0.189f, -0.1682017f);
+            }
+            else
+            {
+                endPosgaizi = new Vector3(0.4175687f, 0.1890412f, -0.1783336f);
+                endPos = new Vector3(0.413185f, 0.1887054f, -0.1682017f);
+            }
+            if (rightNow)
+            {
+                硬盘.localPosition = endPos;
+                硬盘盖.localPosition = endPosgaizi;
+            }
+
+            else
+            {
+                if (open)
+                {
+                    硬盘盖.DOLocalMove(endPosgaizi, animTime).OnComplete(() =>
+                    {
+                        硬盘.DOLocalMove(endPos, animTime).OnComplete(() => { FinishAction?.Invoke(); });
+                    });
+                }
+                else
+                {
+                    硬盘.DOLocalMove(endPos, animTime).OnComplete(() =>
+                    {
+                        硬盘盖.DOLocalMove(endPosgaizi, animTime).OnComplete(() => { FinishAction?.Invoke(); });
+                    });
+                }
+
+
+            }
+        }
 
         public void Switch内存(bool open, bool rightNow, Action FinishAction = null)
         {
@@ -1192,7 +1359,7 @@ namespace Tianbo.Wang
         }
 
 
-        public void SwitchCPU外壳(bool open, bool rightNow, Action FinishAction = null)
+        public void SwitchCPU外壳(bool open, bool rightNow, bool containCpu = false, Action FinishAction = null)
         {
             CPU外壳.DOKill();
             Vector3 endRot;
@@ -1208,7 +1375,26 @@ namespace Tianbo.Wang
             {
                 CPU外壳.DOLocalRotate(endRot, animTime).OnComplete(() =>
                 {
-                    FinishAction?.Invoke();
+                    Transform temp外壳 = CPU外壳.Find("JHDX_JSJ_Cpu01");
+                    temp外壳.DOKill();
+                    if (containCpu)
+                    {
+                        temp外壳.DOLocalMove(new Vector3(0.00051f, 0.00058f, 0.00072f), 0.3f).OnComplete(() =>
+                        {
+                            temp外壳.DOLocalMove(new Vector3(0.0549f, 0.0187f, 0), 0.3f).OnComplete(() =>
+                            {
+                                FinishAction?.Invoke();
+                            });
+                        });
+                        temp外壳.DOLocalRotate(new Vector3(16f, 0f, 0f), 0.3f);
+                    }
+                    else
+                    {
+                        temp外壳.localPosition = Vector3.zero;
+                        temp外壳.localEulerAngles = Vector3.zero;
+                        FinishAction?.Invoke();
+                    }
+
                 });
             }
 
@@ -1271,91 +1457,118 @@ namespace Tianbo.Wang
         }
         public void 连接显示器1()
         {
-            cam.transform.position = 显示器CamTrans.position;
-            cam.transform.rotation = 显示器CamTrans.rotation;
+            cam.transform.DOKill();
+            cam.transform.position = cameraTransFar.position;
+            cam.transform.rotation = cameraTransFar.rotation;
+            cam.transform.DOMove(显示器CamTrans.position, 1f);
+            cam.transform.DORotate(显示器CamTrans.localEulerAngles, 1f);
+            //cam.transform.position = 显示器CamTrans.position;
+            //cam.transform.rotation = 显示器CamTrans.rotation;
             InitSecond();
             shouldConnect显示器1 = true;
             SetStepAction?.Invoke("连接 显示器");
         }
         public void 连接显示器2()
         {
-            cam.transform.position = 机箱CamTrans.position;
-            cam.transform.rotation = 机箱CamTrans.rotation;
+            cam.transform.DOMove(机箱CamTrans.position, 1f);
+            cam.transform.DORotate(机箱CamTrans.localEulerAngles, 1f);
+            //cam.transform.position = 机箱CamTrans.position;
+            //cam.transform.rotation = 机箱CamTrans.rotation;
             InitSecond();
             shouldConnect显示器2 = true;
         }
         public void 连接电源1()
         {
-            cam.transform.position = 机箱CamTrans.position;
-            cam.transform.rotation = 机箱CamTrans.rotation;
+            cam.transform.DOMove(机箱CamTrans.position, 1f);
+            cam.transform.DORotate(机箱CamTrans.localEulerAngles, 1f);
+            //cam.transform.position = 机箱CamTrans.position;
+            //cam.transform.rotation = 机箱CamTrans.rotation;
             InitSecond();
             shouldConnect电源1 = true;
             SetStepAction?.Invoke("连接电源");
         }
         public void 连接电源2()
         {
-            cam.transform.position = 网线CamTrans.position;
-            cam.transform.rotation = 网线CamTrans.rotation;
+            cam.transform.DOMove(网线CamTrans.position, 1f);
+            cam.transform.DORotate(网线CamTrans.localEulerAngles, 1f);
+            //cam.transform.position = 网线CamTrans.position;
+            //cam.transform.rotation = 网线CamTrans.rotation;
             InitSecond();
             shouldConnect电源2 = true;
         }
 
         public void 连接键盘1()
         {
-            cam.transform.position = 键盘鼠标CamTrans.position;
-            cam.transform.rotation = 键盘鼠标CamTrans.rotation;
+            cam.transform.DOMove(键盘鼠标CamTrans.position, 1f);
+            cam.transform.DORotate(键盘鼠标CamTrans.localEulerAngles, 1f);
+            //cam.transform.position = 键盘鼠标CamTrans.position;
+            //cam.transform.rotation = 键盘鼠标CamTrans.rotation;
             shouldConnect键盘1 = true;
             SetStepAction?.Invoke("连接键盘");
         }
         public void 连接键盘2()
         {
-            cam.transform.position = 机箱CamTrans.position;
-            cam.transform.rotation = 机箱CamTrans.rotation;
+            cam.transform.DOMove(机箱CamTrans.position, 1f);
+            cam.transform.DORotate(机箱CamTrans.localEulerAngles, 1f);
+            //cam.transform.position = 机箱CamTrans.position;
+            //cam.transform.rotation = 机箱CamTrans.rotation;
             InitSecond();
             shouldConnect键盘2 = true;
         }
         public void 连接鼠标1()
         {
-            cam.transform.position = 键盘鼠标CamTrans.position;
-            cam.transform.rotation = 键盘鼠标CamTrans.rotation;
+            cam.transform.DOMove(键盘鼠标CamTrans.position, 1f);
+            cam.transform.DORotate(键盘鼠标CamTrans.localEulerAngles, 1f);
+            //cam.transform.position = 键盘鼠标CamTrans.position;
+            //cam.transform.rotation = 键盘鼠标CamTrans.rotation;
             InitSecond();
             shouldConnect鼠标1 = true;
             SetStepAction?.Invoke("连接鼠标");
         }
         public void 连接鼠标2()
         {
-            cam.transform.position = 机箱CamTrans.position;
-            cam.transform.rotation = 机箱CamTrans.rotation;
+            cam.transform.DOMove(机箱CamTrans.position, 1f);
+            cam.transform.DORotate(机箱CamTrans.localEulerAngles, 1f);
+            //cam.transform.position = 机箱CamTrans.position;
+            //cam.transform.rotation = 机箱CamTrans.rotation;
             InitSecond();
             shouldConnect鼠标2 = true;
         }
         public void 连接网线1()
         {
-            cam.transform.position = 机箱CamTrans.position;
-            cam.transform.rotation = 机箱CamTrans.rotation;
+            cam.transform.DOMove(机箱CamTrans.position, 1f);
+            cam.transform.DORotate(机箱CamTrans.localEulerAngles, 1f);
+            //cam.transform.position = 机箱CamTrans.position;
+            //cam.transform.rotation = 机箱CamTrans.rotation;
             InitSecond();
             shouldConnect网线1 = true;
             SetStepAction?.Invoke("连接网线");
         }
         public void 连接网线2()
         {
-            cam.transform.position = 网线CamTrans.position;
-            cam.transform.rotation = 网线CamTrans.rotation;
+            cam.transform.DOMove(网线CamTrans.position, 1f);
+            cam.transform.DORotate(网线CamTrans.localEulerAngles, 1f);
+            //cam.transform.position = 网线CamTrans.position;
+            //cam.transform.rotation = 网线CamTrans.rotation;
             InitSecond();
             shouldConnect网线2 = true;
         }
         public void 连接音响1()
         {
-            cam.transform.position = 音响CamTrans.position;
-            cam.transform.rotation = 音响CamTrans.rotation;
+            cam.transform.DOMove(音响CamTrans.position, 1f);
+            cam.transform.DORotate(音响CamTrans.localEulerAngles, 1f);
+            //cam.transform.position = 音响CamTrans.position;
+            //cam.transform.rotation = 音响CamTrans.rotation;
             InitSecond();
             shouldConnect音响1 = true;
             SetStepAction?.Invoke("连接音响");
         }
         public void 连接音响2()
         {
-            cam.transform.position = 机箱CamTrans.position;
-            cam.transform.rotation = 机箱CamTrans.rotation;
+            cam.transform.DOMove(机箱CamTrans.position, 1f);
+            cam.transform.DORotate(机箱CamTrans.localEulerAngles, 1f);
+            //cam.transform.position = 机箱CamTrans.position;
+            //cam.transform.rotation = 机箱CamTrans.rotation;
             InitSecond();
             shouldConnect音响2 = true;
         }

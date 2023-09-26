@@ -124,16 +124,16 @@ namespace Tianbo.Wang
                     SceneGoManager.Instance.安装内存();
                     break;
                 case 4:
-                    SceneGoManager.Instance.安装主板();
+                    SceneGoManager.Instance.安装硬盘();
                     break;
                 case 5:
-                    SceneGoManager.Instance.安装电源();
+                    SceneGoManager.Instance.安装主板();
                     break;
                 case 6:
-                    SceneGoManager.Instance.安装显卡();
+                    SceneGoManager.Instance.安装电源();
                     break;
                 case 7:
-                    SceneGoManager.Instance.安装硬盘();
+                    SceneGoManager.Instance.安装显卡();
                     break;
                 case 8:
                     SceneGoManager.Instance.安装机箱盖();
