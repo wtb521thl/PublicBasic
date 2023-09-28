@@ -60,8 +60,12 @@ namespace Tianbo.Wang
             }
         }
         Image lastSelectImage;
-        private void AddBagAction(string arg1, bool arg2)
+        private void AddBagAction(int index, string arg1, bool arg2)
         {
+            if (index != 0)
+            {
+                return;
+            }
             if (arg2)
             {
                 GameObject go = Instantiate(itemIcon, bagTrans);

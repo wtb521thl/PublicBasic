@@ -9,7 +9,7 @@ namespace Tianbo.Wang
 {
     public class SceneGoManager : Wtb_SingleMono<SceneGoManager>
     {
-        public Action<string, bool> AddBagAction;
+        public Action<int, string, bool> AddBagAction;
         public Action<string> SetStepAction;
 
         public GameObject host;
@@ -52,7 +52,8 @@ namespace Tianbo.Wang
         public Transform 安装硬盘CameraPoint;
 
 
-        public GameObject 显示器线;
+        public GameObject 显示器HDMI线;
+        public GameObject 显示器DP线;
         public GameObject 音响线;
         public GameObject 键盘线;
         public GameObject 鼠标线;
@@ -77,10 +78,13 @@ namespace Tianbo.Wang
         public GameObject DragPoint_键盘;
         public GameObject DragPoint_音响;
         public GameObject DragPoint_显示器HDMI;
+        public GameObject DragPoint_显示器DP;
         public GameObject DragPoint_机箱电源插孔;
         public GameObject DragPoint_机箱USB;
+        public GameObject DragPoint_机箱音频插孔;
         public GameObject DragPoint_机箱网线插孔;
         public GameObject DragPoint_机箱HDMI;
+        public GameObject DragPoint_机箱DP;
         public GameObject DragPoint_插排网线插座;
         public GameObject DragPoint_插排电源插座;
 
@@ -120,6 +124,14 @@ namespace Tianbo.Wang
         bool shouldClick机箱盖UI;
         bool shouldClick机箱盖插槽;
 
+        bool shouldClickHDMIUI;
+        bool shouldClickDPUI;
+        bool shouldClick电源线UI;
+        bool shouldClickUSBUI;
+        bool shouldClick网线UI;
+        bool shouldClick音频线UI;
+
+
         void Init()
         {
             shouldClickCPUUI = false;
@@ -141,6 +153,7 @@ namespace Tianbo.Wang
             shouldClick硬盘插槽 = false;
             shouldClick机箱盖UI = false;
             shouldClick机箱盖插槽 = false;
+
         }
 
         float animTime = 0.5f;
@@ -202,7 +215,7 @@ namespace Tianbo.Wang
                     {
                         if (hit.transform.gameObject == CPU插槽)
                         {
-                            AddBagAction?.Invoke("CPU", false);
+                            AddBagAction?.Invoke(0, "CPU", false);
                             shouldClickCPU插槽 = false;
                             SwitchCPU(false, false, () =>
                             {
@@ -283,7 +296,7 @@ namespace Tianbo.Wang
                     {
                         if (hit.transform == CPU外壳)
                         {
-                            AddBagAction?.Invoke("散热器", false);
+                            AddBagAction?.Invoke(0, "散热器", false);
                             shouldClickCPU散热器 = false;
                             Switch散热器(false, false, () =>
                             {
@@ -311,7 +324,7 @@ namespace Tianbo.Wang
                     {
                         if (hit.transform.gameObject == 内存条插槽)
                         {
-                            AddBagAction?.Invoke("内存", false);
+                            AddBagAction?.Invoke(0, "内存", false);
                             shouldClick内存插槽 = false;
                             Switch内存(false, false, () =>
                             {
@@ -340,7 +353,7 @@ namespace Tianbo.Wang
                     {
                         if (hit.transform.gameObject == 硬盘插槽)
                         {
-                            AddBagAction?.Invoke("硬盘", false);
+                            AddBagAction?.Invoke(0, "硬盘", false);
                             shouldClick硬盘插槽 = false;
                             Switch硬盘(false, false, () =>
                             {
@@ -416,7 +429,7 @@ namespace Tianbo.Wang
                     {
                         if (hit.transform.gameObject == 电源插槽)
                         {
-                            AddBagAction?.Invoke("电源", false);
+                            AddBagAction?.Invoke(0, "电源", false);
                             shouldClick电源插槽 = false;
                             Switch电源(false, false, () =>
                             {
@@ -442,7 +455,7 @@ namespace Tianbo.Wang
                     {
                         if (hit.transform.gameObject == 显卡插槽)
                         {
-                            AddBagAction?.Invoke("显卡", false);
+                            AddBagAction?.Invoke(0, "显卡", false);
                             shouldClick显卡插槽 = false;
                             Switch显卡(false, false, () =>
                             {
@@ -469,7 +482,7 @@ namespace Tianbo.Wang
                     {
                         if (hit.transform.gameObject == 机箱盖插槽)
                         {
-                            AddBagAction?.Invoke("机箱盖", false);
+                            AddBagAction?.Invoke(0, "机箱盖", false);
                             shouldClick机箱盖插槽 = false;
                             Switch机箱盖(false, false, () =>
                             {
@@ -498,11 +511,13 @@ namespace Tianbo.Wang
 
                 if (shouldConnect显示器1)
                 {
-                    HighlightObj(DragPoint_显示器HDMI);
+                    HighlightObj(isHdmiOrDp ? DragPoint_显示器HDMI : DragPoint_显示器DP);
                     if (Input.GetMouseButtonDown(0))
                     {
-                        if (hit.transform.gameObject == DragPoint_显示器HDMI)
+                        if (hit.transform.gameObject == (isHdmiOrDp ? DragPoint_显示器HDMI : DragPoint_显示器DP))
                         {
+                            shouldClickHDMIUI = false;
+                            shouldClickDPUI = false;
                             shouldConnect显示器1 = false;
                             连接显示器2();
                         }
@@ -517,18 +532,21 @@ namespace Tianbo.Wang
                 }
                 if (shouldConnect显示器2)
                 {
-                    HighlightObj(DragPoint_机箱HDMI);
+                    HighlightObj(isHdmiOrDp ? DragPoint_机箱HDMI : DragPoint_机箱DP);
                     if (Input.GetMouseButtonDown(0))
                     {
-                        if (hit.transform.gameObject == DragPoint_机箱HDMI)
+                        if (hit.transform.gameObject == (isHdmiOrDp ? DragPoint_机箱HDMI : DragPoint_机箱DP))
                         {
                             shouldConnect显示器2 = false;
-                            显示器线.SetActive(true);
+                            if (isHdmiOrDp)
+                                显示器HDMI线.SetActive(true);
+                            else
+                                显示器DP线.SetActive(true);
 
                             cam.transform.DOMove(显示器机箱线CamTrans.position, 1f);
                             cam.transform.DORotate(显示器机箱线CamTrans.localEulerAngles, 1f);
 
-                            HighlightObjAutoOff(显示器线, () =>
+                            HighlightObjAutoOff(isHdmiOrDp ? 显示器HDMI线 : 显示器DP线, () =>
                             {
                                 连接电源1();
                             });
@@ -551,6 +569,7 @@ namespace Tianbo.Wang
                         if (hit.transform.gameObject == DragPoint_机箱电源插孔)
                         {
                             shouldConnect电源1 = false;
+                            shouldClick电源线UI = false;
                             连接电源2();
                         }
                         else
@@ -597,6 +616,7 @@ namespace Tianbo.Wang
                         if (hit.transform.gameObject == DragPoint_键盘)
                         {
                             shouldConnect键盘1 = false;
+                            shouldClickUSBUI = false;
                             连接键盘2();
                         }
                         else
@@ -638,6 +658,7 @@ namespace Tianbo.Wang
                     {
                         if (hit.transform.gameObject == DragPoint_鼠标)
                         {
+                            shouldClickUSBUI = false;
                             shouldConnect鼠标1 = false;
                             连接鼠标2();
                         }
@@ -664,7 +685,7 @@ namespace Tianbo.Wang
                             {
                                 连接网线1();
                             });
-                        
+
 
                         }
                         else
@@ -681,6 +702,7 @@ namespace Tianbo.Wang
                     {
                         if (hit.transform.gameObject == DragPoint_机箱网线插孔)
                         {
+                            shouldClick网线UI = false;
                             shouldConnect网线1 = false;
                             连接网线2();
                         }
@@ -706,8 +728,8 @@ namespace Tianbo.Wang
                             {
                                 连接音响1();
                             });
-           
-                     
+
+
                         }
                         else
                         {
@@ -723,6 +745,7 @@ namespace Tianbo.Wang
                     {
                         if (hit.transform.gameObject == DragPoint_音响)
                         {
+                            shouldClick音频线UI = false;
                             shouldConnect音响1 = false;
                             连接音响2();
                         }
@@ -735,10 +758,10 @@ namespace Tianbo.Wang
                 }
                 if (shouldConnect音响2)
                 {
-                    HighlightObj(DragPoint_机箱USB);
+                    HighlightObj(DragPoint_机箱音频插孔);
                     if (Input.GetMouseButtonDown(0))
                     {
-                        if (hit.transform.gameObject == DragPoint_机箱USB)
+                        if (hit.transform.gameObject == DragPoint_机箱音频插孔)
                         {
                             shouldConnect音响2 = false;
 
@@ -755,7 +778,7 @@ namespace Tianbo.Wang
                             });
 
 
-     
+
                         }
                         else
                         {
@@ -831,7 +854,8 @@ namespace Tianbo.Wang
             host.SetActive(false);
             computer.SetActive(true);
 
-            显示器线.SetActive(false);
+            显示器HDMI线.SetActive(false);
+            显示器DP线.SetActive(false);
             音响线.SetActive(false);
             键盘线.SetActive(false);
             鼠标线.SetActive(false);
@@ -866,32 +890,32 @@ namespace Tianbo.Wang
 
                 Switch机箱盖(true, false, () =>
                 {
-                    AddBagAction?.Invoke("机箱盖", true);
+                    AddBagAction?.Invoke(0, "机箱盖", true);
 
                     Switch显卡(true, false, () =>
                     {
-                        AddBagAction?.Invoke("显卡", true);
+                        AddBagAction?.Invoke(0, "显卡", true);
                         Switch电源(true, false, () =>
                         {
-                            AddBagAction?.Invoke("电源", true);
+                            AddBagAction?.Invoke(0, "电源", true);
                             Switch主板(true, false, () =>
                             {
                                 Switch硬盘(true, false, () =>
                                 {
-                                    AddBagAction?.Invoke("硬盘", true);
+                                    AddBagAction?.Invoke(0, "硬盘", true);
                                     Switch内存(true, false, () =>
                                 {
-                                    AddBagAction?.Invoke("内存", true);
+                                    AddBagAction?.Invoke(0, "内存", true);
                                     Switch散热器(true, false, () =>
                                     {
-                                        AddBagAction?.Invoke("散热器", true);
+                                        AddBagAction?.Invoke(0, "散热器", true);
                                         SwitchCPU硅脂(false, false, () =>
                                         {
                                             SwitchCPU外壳(true, false, false, () =>
                                             {
                                                 SwitchCPU(true, false, () =>
                                                 {
-                                                    AddBagAction?.Invoke("CPU", true);
+                                                    AddBagAction?.Invoke(0, "CPU", true);
                                                     SwitchCPU外壳(false, false, false, () =>
                                                     {
                                                         Debug.Log("第一步动画完成");
@@ -916,13 +940,13 @@ namespace Tianbo.Wang
         public void 安装CPU()
         {
             SetStepAction?.Invoke("安装CPU");
-            AddBagAction?.Invoke("机箱盖", true);
-            AddBagAction?.Invoke("显卡", true);
-            AddBagAction?.Invoke("电源", true);
-            AddBagAction?.Invoke("硬盘", true);
-            AddBagAction?.Invoke("内存", true);
-            AddBagAction?.Invoke("散热器", true);
-            AddBagAction?.Invoke("CPU", true);
+            AddBagAction?.Invoke(0, "机箱盖", true);
+            AddBagAction?.Invoke(0, "显卡", true);
+            AddBagAction?.Invoke(0, "电源", true);
+            AddBagAction?.Invoke(0, "硬盘", true);
+            AddBagAction?.Invoke(0, "内存", true);
+            AddBagAction?.Invoke(0, "散热器", true);
+            AddBagAction?.Invoke(0, "CPU", true);
 
 
             cam.transform.DOMove(安装CPUCameraPoint.position, 1f);
@@ -947,12 +971,12 @@ namespace Tianbo.Wang
         public void 安装散热器()
         {
             SetStepAction?.Invoke("安装 散热器");
-            AddBagAction?.Invoke("机箱盖", true);
-            AddBagAction?.Invoke("显卡", true);
-            AddBagAction?.Invoke("电源", true);
-            AddBagAction?.Invoke("硬盘", true);
-            AddBagAction?.Invoke("内存", true);
-            AddBagAction?.Invoke("散热器", true);
+            AddBagAction?.Invoke(0, "机箱盖", true);
+            AddBagAction?.Invoke(0, "显卡", true);
+            AddBagAction?.Invoke(0, "电源", true);
+            AddBagAction?.Invoke(0, "硬盘", true);
+            AddBagAction?.Invoke(0, "内存", true);
+            AddBagAction?.Invoke(0, "散热器", true);
 
             cam.transform.DOMove(安装散热硅脂CameraPoint.position, 1f);
             cam.transform.DORotate(安装散热硅脂CameraPoint.localEulerAngles, 1f);
@@ -976,11 +1000,11 @@ namespace Tianbo.Wang
         public void 安装内存()
         {
             SetStepAction?.Invoke("安装内存");
-            AddBagAction?.Invoke("机箱盖", true);
-            AddBagAction?.Invoke("显卡", true);
-            AddBagAction?.Invoke("电源", true);
-            AddBagAction?.Invoke("硬盘", true);
-            AddBagAction?.Invoke("内存", true);
+            AddBagAction?.Invoke(0, "机箱盖", true);
+            AddBagAction?.Invoke(0, "显卡", true);
+            AddBagAction?.Invoke(0, "电源", true);
+            AddBagAction?.Invoke(0, "硬盘", true);
+            AddBagAction?.Invoke(0, "内存", true);
 
             cam.transform.DOMove(安装内存条CameraPoint.position, 1f);
             cam.transform.DORotate(安装内存条CameraPoint.localEulerAngles, 1f);
@@ -1002,10 +1026,10 @@ namespace Tianbo.Wang
         public void 安装硬盘()
         {
             SetStepAction?.Invoke("安装硬盘");
-            AddBagAction?.Invoke("机箱盖", true);
-            AddBagAction?.Invoke("显卡", true);
-            AddBagAction?.Invoke("电源", true);
-            AddBagAction?.Invoke("硬盘", true);
+            AddBagAction?.Invoke(0, "机箱盖", true);
+            AddBagAction?.Invoke(0, "显卡", true);
+            AddBagAction?.Invoke(0, "电源", true);
+            AddBagAction?.Invoke(0, "硬盘", true);
 
             cam.transform.DOMove(安装硬盘CameraPoint.position, 1f);
             cam.transform.DORotate(安装硬盘CameraPoint.localEulerAngles, 1f);
@@ -1028,10 +1052,10 @@ namespace Tianbo.Wang
         public void 安装主板()
         {
             SetStepAction?.Invoke("安装主板");
-            AddBagAction?.Invoke("机箱盖", true);
-            AddBagAction?.Invoke("显卡", true);
-            AddBagAction?.Invoke("电源", true);
-            AddBagAction?.Invoke("硬盘", true);
+            AddBagAction?.Invoke(0, "机箱盖", true);
+            AddBagAction?.Invoke(0, "显卡", true);
+            AddBagAction?.Invoke(0, "电源", true);
+            AddBagAction?.Invoke(0, "硬盘", true);
 
 
             cam.transform.DOMove(安装主板CameraPoint.position, 1f);
@@ -1055,9 +1079,9 @@ namespace Tianbo.Wang
         public void 安装电源()
         {
             SetStepAction?.Invoke("安装电源");
-            AddBagAction?.Invoke("机箱盖", true);
-            AddBagAction?.Invoke("显卡", true);
-            AddBagAction?.Invoke("电源", true);
+            AddBagAction?.Invoke(0, "机箱盖", true);
+            AddBagAction?.Invoke(0, "显卡", true);
+            AddBagAction?.Invoke(0, "电源", true);
 
             cam.transform.DOMove(安装电源CameraPoint.position, 1f);
             cam.transform.DORotate(安装电源CameraPoint.localEulerAngles, 1f);
@@ -1081,8 +1105,8 @@ namespace Tianbo.Wang
         public void 安装显卡()
         {
             SetStepAction?.Invoke("安装 独立显卡");
-            AddBagAction?.Invoke("机箱盖", true);
-            AddBagAction?.Invoke("显卡", true);
+            AddBagAction?.Invoke(0, "机箱盖", true);
+            AddBagAction?.Invoke(0, "显卡", true);
 
             cam.transform.DOMove(安装显卡CameraPoint.position, 1f);
             cam.transform.DORotate(安装显卡CameraPoint.localEulerAngles, 1f);
@@ -1106,7 +1130,7 @@ namespace Tianbo.Wang
         public void 安装机箱盖()
         {
             SetStepAction?.Invoke("安装机箱");
-            AddBagAction?.Invoke("机箱盖", true);
+            AddBagAction?.Invoke(0, "机箱盖", true);
 
             cam.transform.DOMove(cameraTrans.position, 1f);
             cam.transform.DORotate(cameraTrans.localEulerAngles, 1f);
@@ -1126,7 +1150,7 @@ namespace Tianbo.Wang
             Init();
             shouldClick机箱盖UI = true;
         }
-
+        bool isHdmiOrDp = true;
         public void ClickUIAction(string uiName)
         {
             Debug.Log(uiName);
@@ -1179,6 +1203,56 @@ namespace Tianbo.Wang
                     {
                         shouldClick机箱盖UI = false;
                         shouldClick机箱盖插槽 = true;
+                    }
+                    break;
+
+                case "HDMI接口":
+                    InitConnect3dBools();
+                    if (shouldClickHDMIUI)
+                    {
+                        isHdmiOrDp = true;
+                        shouldConnect显示器1 = true;
+                    }
+                    break;
+                case "DP接口":
+                    InitConnect3dBools();
+                    if (shouldClickDPUI)
+                    {
+                        isHdmiOrDp = false;
+                        shouldConnect显示器1 = true;
+                    }
+                    break;
+                case "USB2.0":
+                    InitConnect3dBools();
+                    if (shouldClickUSBUI)
+                    {
+                        if (isKeyboard)
+                            shouldConnect键盘1 = true;
+                        else
+                            shouldConnect鼠标1 = true;
+                    }
+                    break;
+                case "电源线":
+                    InitConnect3dBools();
+                    if (shouldClick电源线UI)
+                    {
+                        shouldConnect电源1 = true;
+                    }
+                    break;
+                case "以太网接口":
+                    InitConnect3dBools();
+                    if (shouldClick网线UI)
+                    {
+
+                        shouldConnect网线1 = true;
+                    }
+                    break;
+                case "3.5毫米音频接口":
+                    InitConnect3dBools();
+                    if (shouldClick音频线UI)
+                    {
+
+                        shouldConnect音响1 = true;
                     }
                     break;
             }
@@ -1441,6 +1515,14 @@ namespace Tianbo.Wang
         #region 第二模块
         void InitSecond()
         {
+            InitConnect3dBools();
+
+            InitUIBools();
+
+        }
+
+        private void InitConnect3dBools()
+        {
             shouldConnect显示器1 = false;
             shouldConnect显示器2 = false;
             shouldConnect电源1 = false;
@@ -1453,10 +1535,32 @@ namespace Tianbo.Wang
             shouldConnect网线2 = false;
             shouldConnect音响1 = false;
             shouldConnect音响2 = false;
+        }
 
+        private void InitUIBools()
+        {
+            shouldClickHDMIUI = false;
+            shouldClickDPUI = false;
+            shouldClick电源线UI = false;
+            shouldClickUSBUI = false;
+            shouldClick网线UI = false;
+            shouldClick音频线UI = false;
+        }
+
+        void AddToBag2()
+        {
+            AddBagAction?.Invoke(1, "HDMI接口", true);
+            AddBagAction?.Invoke(1, "DP接口", true);
+            AddBagAction?.Invoke(1, "USB2.0", true);
+            AddBagAction?.Invoke(1, "USB-C", true);
+            AddBagAction?.Invoke(1, "以太网接口", true);
+            AddBagAction?.Invoke(1, "3.5毫米音频接口", true);
+            AddBagAction?.Invoke(1, "电源线", true);
         }
         public void 连接显示器1()
         {
+            显示器HDMI线.SetActive(false);
+            显示器DP线.SetActive(false);
             cam.transform.DOKill();
             cam.transform.position = cameraTransFar.position;
             cam.transform.rotation = cameraTransFar.rotation;
@@ -1465,8 +1569,10 @@ namespace Tianbo.Wang
             //cam.transform.position = 显示器CamTrans.position;
             //cam.transform.rotation = 显示器CamTrans.rotation;
             InitSecond();
-            shouldConnect显示器1 = true;
+            shouldClickHDMIUI = true;
+            shouldClickDPUI = true;
             SetStepAction?.Invoke("连接 显示器");
+            AddToBag2();
         }
         public void 连接显示器2()
         {
@@ -1474,18 +1580,21 @@ namespace Tianbo.Wang
             cam.transform.DORotate(机箱CamTrans.localEulerAngles, 1f);
             //cam.transform.position = 机箱CamTrans.position;
             //cam.transform.rotation = 机箱CamTrans.rotation;
-            InitSecond();
+            InitConnect3dBools();
             shouldConnect显示器2 = true;
         }
         public void 连接电源1()
         {
+            机箱电源线.SetActive(false);
             cam.transform.DOMove(机箱CamTrans.position, 1f);
             cam.transform.DORotate(机箱CamTrans.localEulerAngles, 1f);
             //cam.transform.position = 机箱CamTrans.position;
             //cam.transform.rotation = 机箱CamTrans.rotation;
             InitSecond();
-            shouldConnect电源1 = true;
+            shouldClick电源线UI = true;
+
             SetStepAction?.Invoke("连接电源");
+            AddToBag2();
         }
         public void 连接电源2()
         {
@@ -1493,18 +1602,23 @@ namespace Tianbo.Wang
             cam.transform.DORotate(网线CamTrans.localEulerAngles, 1f);
             //cam.transform.position = 网线CamTrans.position;
             //cam.transform.rotation = 网线CamTrans.rotation;
-            InitSecond();
+            InitConnect3dBools();
             shouldConnect电源2 = true;
         }
-
+        bool isKeyboard = false;
         public void 连接键盘1()
         {
+            键盘线.SetActive(false);
+
             cam.transform.DOMove(键盘鼠标CamTrans.position, 1f);
             cam.transform.DORotate(键盘鼠标CamTrans.localEulerAngles, 1f);
             //cam.transform.position = 键盘鼠标CamTrans.position;
             //cam.transform.rotation = 键盘鼠标CamTrans.rotation;
-            shouldConnect键盘1 = true;
+            InitSecond();
+            isKeyboard = true;
+            shouldClickUSBUI = true;
             SetStepAction?.Invoke("连接键盘");
+            AddToBag2();
         }
         public void 连接键盘2()
         {
@@ -1512,18 +1626,21 @@ namespace Tianbo.Wang
             cam.transform.DORotate(机箱CamTrans.localEulerAngles, 1f);
             //cam.transform.position = 机箱CamTrans.position;
             //cam.transform.rotation = 机箱CamTrans.rotation;
-            InitSecond();
+            InitConnect3dBools();
             shouldConnect键盘2 = true;
         }
         public void 连接鼠标1()
         {
+            鼠标线.SetActive(false);
             cam.transform.DOMove(键盘鼠标CamTrans.position, 1f);
             cam.transform.DORotate(键盘鼠标CamTrans.localEulerAngles, 1f);
             //cam.transform.position = 键盘鼠标CamTrans.position;
             //cam.transform.rotation = 键盘鼠标CamTrans.rotation;
             InitSecond();
-            shouldConnect鼠标1 = true;
+            isKeyboard = false;
+            shouldClickUSBUI = true;
             SetStepAction?.Invoke("连接鼠标");
+            AddToBag2();
         }
         public void 连接鼠标2()
         {
@@ -1531,18 +1648,20 @@ namespace Tianbo.Wang
             cam.transform.DORotate(机箱CamTrans.localEulerAngles, 1f);
             //cam.transform.position = 机箱CamTrans.position;
             //cam.transform.rotation = 机箱CamTrans.rotation;
-            InitSecond();
+            InitConnect3dBools();
             shouldConnect鼠标2 = true;
         }
         public void 连接网线1()
         {
+            网线.SetActive(false);
             cam.transform.DOMove(机箱CamTrans.position, 1f);
             cam.transform.DORotate(机箱CamTrans.localEulerAngles, 1f);
             //cam.transform.position = 机箱CamTrans.position;
             //cam.transform.rotation = 机箱CamTrans.rotation;
             InitSecond();
-            shouldConnect网线1 = true;
+            shouldClick网线UI = true;
             SetStepAction?.Invoke("连接网线");
+            AddToBag2();
         }
         public void 连接网线2()
         {
@@ -1550,18 +1669,20 @@ namespace Tianbo.Wang
             cam.transform.DORotate(网线CamTrans.localEulerAngles, 1f);
             //cam.transform.position = 网线CamTrans.position;
             //cam.transform.rotation = 网线CamTrans.rotation;
-            InitSecond();
+            InitConnect3dBools();
             shouldConnect网线2 = true;
         }
         public void 连接音响1()
         {
+            音响线.SetActive(false);
             cam.transform.DOMove(音响CamTrans.position, 1f);
             cam.transform.DORotate(音响CamTrans.localEulerAngles, 1f);
             //cam.transform.position = 音响CamTrans.position;
             //cam.transform.rotation = 音响CamTrans.rotation;
             InitSecond();
-            shouldConnect音响1 = true;
+            shouldClick音频线UI = true;
             SetStepAction?.Invoke("连接音响");
+            AddToBag2();
         }
         public void 连接音响2()
         {
@@ -1569,7 +1690,7 @@ namespace Tianbo.Wang
             cam.transform.DORotate(机箱CamTrans.localEulerAngles, 1f);
             //cam.transform.position = 机箱CamTrans.position;
             //cam.transform.rotation = 机箱CamTrans.rotation;
-            InitSecond();
+            InitConnect3dBools();
             shouldConnect音响2 = true;
         }
         #endregion
