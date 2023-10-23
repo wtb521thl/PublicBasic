@@ -54,6 +54,7 @@ namespace Tianbo.Wang
 
         public GameObject 显示器HDMI线;
         public GameObject 显示器DP线;
+        public GameObject 显示器VGA线;
         public GameObject 音响线;
         public GameObject 键盘线;
         public GameObject 鼠标线;
@@ -79,12 +80,14 @@ namespace Tianbo.Wang
         public GameObject DragPoint_音响;
         public GameObject DragPoint_显示器HDMI;
         public GameObject DragPoint_显示器DP;
+        public GameObject DragPoint_显示器VGA;
         public GameObject DragPoint_机箱电源插孔;
         public GameObject DragPoint_机箱USB;
         public GameObject DragPoint_机箱音频插孔;
         public GameObject DragPoint_机箱网线插孔;
         public GameObject DragPoint_机箱HDMI;
         public GameObject DragPoint_机箱DP;
+        public GameObject DragPoint_机箱VGA;
         public GameObject DragPoint_插排网线插座;
         public GameObject DragPoint_插排电源插座;
 
@@ -126,6 +129,7 @@ namespace Tianbo.Wang
 
         bool shouldClickHDMIUI;
         bool shouldClickDPUI;
+        bool shouldClickVGAUI;
         bool shouldClick电源线UI;
         bool shouldClickUSBUI;
         bool shouldClick网线UI;
@@ -511,20 +515,34 @@ namespace Tianbo.Wang
 
                 if (shouldConnect显示器1)
                 {
-                    HighlightObj(isHdmiOrDp ? DragPoint_显示器HDMI : DragPoint_显示器DP);
+                    GameObject tempGo = null;
+                    switch (isHdmiOrDpOrVga)
+                    {
+                        case 0:
+                            tempGo = DragPoint_显示器HDMI;
+                            break;
+                        case 1:
+                            tempGo = DragPoint_显示器DP;
+                            break;
+                        case 2:
+                            tempGo = DragPoint_显示器VGA;
+                            break;
+                    }
+                    HighlightObj(tempGo);
                     if (Input.GetMouseButtonDown(0))
                     {
-                        if (hit.transform.gameObject == (isHdmiOrDp ? DragPoint_显示器HDMI : DragPoint_显示器DP))
+                        if (hit.transform.gameObject == tempGo)
                         {
                             shouldClickHDMIUI = false;
                             shouldClickDPUI = false;
+                            shouldClickVGAUI = false;
                             shouldConnect显示器1 = false;
                             连接显示器2();
                         }
                         else
                         {
                             //错误提示
-                            WrongTips();
+                            //   WrongTips();
                         }
                     }
 
@@ -532,21 +550,35 @@ namespace Tianbo.Wang
                 }
                 if (shouldConnect显示器2)
                 {
-                    HighlightObj(isHdmiOrDp ? DragPoint_机箱HDMI : DragPoint_机箱DP);
+                    GameObject tempGo = null;
+                    GameObject tempLineGo = null;
+                    switch (isHdmiOrDpOrVga)
+                    {
+                        case 0:
+                            tempGo = DragPoint_机箱HDMI;
+                            tempLineGo = 显示器HDMI线;
+                            break;
+                        case 1:
+                            tempGo = DragPoint_机箱DP;
+                            tempLineGo = 显示器DP线;
+                            break;
+                        case 2:
+                            tempGo = DragPoint_机箱VGA;
+                            tempLineGo = 显示器VGA线;
+                            break;
+                    }
+                    HighlightObj(tempGo);
                     if (Input.GetMouseButtonDown(0))
                     {
-                        if (hit.transform.gameObject == (isHdmiOrDp ? DragPoint_机箱HDMI : DragPoint_机箱DP))
+                        if (hit.transform.gameObject == tempGo)
                         {
                             shouldConnect显示器2 = false;
-                            if (isHdmiOrDp)
-                                显示器HDMI线.SetActive(true);
-                            else
-                                显示器DP线.SetActive(true);
+                            tempLineGo.SetActive(true);
 
                             cam.transform.DOMove(显示器机箱线CamTrans.position, 1f);
                             cam.transform.DORotate(显示器机箱线CamTrans.localEulerAngles, 1f);
 
-                            HighlightObjAutoOff(isHdmiOrDp ? 显示器HDMI线 : 显示器DP线, () =>
+                            HighlightObjAutoOff(tempLineGo, () =>
                             {
                                 连接电源1();
                             });
@@ -856,6 +888,7 @@ namespace Tianbo.Wang
 
             显示器HDMI线.SetActive(false);
             显示器DP线.SetActive(false);
+            显示器VGA线.SetActive(false);
             音响线.SetActive(false);
             键盘线.SetActive(false);
             鼠标线.SetActive(false);
@@ -1150,7 +1183,10 @@ namespace Tianbo.Wang
             Init();
             shouldClick机箱盖UI = true;
         }
-        bool isHdmiOrDp = true;
+        /// <summary>
+        /// 0是HDMI，1是DP，2是VGA
+        /// </summary>
+        int isHdmiOrDpOrVga = 0;
         public void ClickUIAction(string uiName)
         {
             Debug.Log(uiName);
@@ -1210,7 +1246,7 @@ namespace Tianbo.Wang
                     InitConnect3dBools();
                     if (shouldClickHDMIUI)
                     {
-                        isHdmiOrDp = true;
+                        isHdmiOrDpOrVga = 0;
                         shouldConnect显示器1 = true;
                     }
                     break;
@@ -1218,7 +1254,15 @@ namespace Tianbo.Wang
                     InitConnect3dBools();
                     if (shouldClickDPUI)
                     {
-                        isHdmiOrDp = false;
+                        isHdmiOrDpOrVga = 1;
+                        shouldConnect显示器1 = true;
+                    }
+                    break;
+                case "VGA接口":
+                    InitConnect3dBools();
+                    if (shouldClickVGAUI)
+                    {
+                        isHdmiOrDpOrVga = 2;
                         shouldConnect显示器1 = true;
                     }
                     break;
@@ -1541,6 +1585,7 @@ namespace Tianbo.Wang
         {
             shouldClickHDMIUI = false;
             shouldClickDPUI = false;
+            shouldClickVGAUI = false;
             shouldClick电源线UI = false;
             shouldClickUSBUI = false;
             shouldClick网线UI = false;
@@ -1551,6 +1596,7 @@ namespace Tianbo.Wang
         {
             AddBagAction?.Invoke(1, "HDMI接口", true);
             AddBagAction?.Invoke(1, "DP接口", true);
+            AddBagAction?.Invoke(1, "VGA接口", true);
             AddBagAction?.Invoke(1, "USB2.0", true);
             AddBagAction?.Invoke(1, "USB-C", true);
             AddBagAction?.Invoke(1, "以太网接口", true);
@@ -1560,6 +1606,7 @@ namespace Tianbo.Wang
         public void 连接显示器1()
         {
             显示器HDMI线.SetActive(false);
+            显示器VGA线.SetActive(false);
             显示器DP线.SetActive(false);
             cam.transform.DOKill();
             cam.transform.position = cameraTransFar.position;
@@ -1571,8 +1618,14 @@ namespace Tianbo.Wang
             InitSecond();
             shouldClickHDMIUI = true;
             shouldClickDPUI = true;
+            shouldClickVGAUI = true;
             SetStepAction?.Invoke("连接 显示器");
             AddToBag2();
+            if (tempParent == null)
+            {
+                tempParent = GameObject.Find("Canvas").transform;
+            }
+            TipsManager.Instance.ShowTips("首先选择左侧线材，再选择接口", tempParent);
         }
         public void 连接显示器2()
         {
