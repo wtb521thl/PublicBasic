@@ -136,7 +136,7 @@ namespace Tianbo.Wang
         bool shouldClick音频线UI;
 
 
-        void Init()
+        public void Init()
         {
             shouldClickCPUUI = false;
             shouldClickCPU插槽 = false;
@@ -548,6 +548,7 @@ namespace Tianbo.Wang
 
 
                 }
+                else
                 if (shouldConnect显示器2)
                 {
                     GameObject tempGo = null;
@@ -570,6 +571,8 @@ namespace Tianbo.Wang
                     HighlightObj(tempGo);
                     if (Input.GetMouseButtonDown(0))
                     {
+                        Debug.Log(hit.transform.gameObject);
+                        Debug.Log(tempGo);
                         if (hit.transform.gameObject == tempGo)
                         {
                             shouldConnect显示器2 = false;
@@ -593,6 +596,7 @@ namespace Tianbo.Wang
 
 
                 }
+                else
                 if (shouldConnect电源1)
                 {
                     HighlightObj(DragPoint_机箱电源插孔);
@@ -613,6 +617,7 @@ namespace Tianbo.Wang
 
 
                 }
+                else
                 if (shouldConnect电源2)
                 {
                     HighlightObj(DragPoint_插排电源插座);
@@ -640,6 +645,7 @@ namespace Tianbo.Wang
                         }
                     }
                 }
+                else
                 if (shouldConnect键盘1)
                 {
                     HighlightObj(DragPoint_键盘);
@@ -658,6 +664,7 @@ namespace Tianbo.Wang
                         }
                     }
                 }
+                else
                 if (shouldConnect键盘2)
                 {
                     HighlightObj(DragPoint_机箱USB);
@@ -683,6 +690,7 @@ namespace Tianbo.Wang
                         }
                     }
                 }
+                else
                 if (shouldConnect鼠标1)
                 {
                     HighlightObj(DragPoint_鼠标);
@@ -701,6 +709,7 @@ namespace Tianbo.Wang
                         }
                     }
                 }
+                else
                 if (shouldConnect鼠标2)
                 {
                     HighlightObj(DragPoint_机箱USB);
@@ -727,6 +736,7 @@ namespace Tianbo.Wang
                         }
                     }
                 }
+                else
                 if (shouldConnect网线1)
                 {
                     HighlightObj(DragPoint_机箱网线插孔);
@@ -745,6 +755,7 @@ namespace Tianbo.Wang
                         }
                     }
                 }
+                else
                 if (shouldConnect网线2)
                 {
                     HighlightObj(DragPoint_插排网线插座);
@@ -770,6 +781,7 @@ namespace Tianbo.Wang
                         }
                     }
                 }
+                else
                 if (shouldConnect音响1)
                 {
                     HighlightObj(DragPoint_音响);
@@ -788,6 +800,7 @@ namespace Tianbo.Wang
                         }
                     }
                 }
+                else
                 if (shouldConnect音响2)
                 {
                     HighlightObj(DragPoint_机箱音频插孔);
@@ -1243,33 +1256,33 @@ namespace Tianbo.Wang
                     break;
 
                 case "HDMI接口":
-                    InitConnect3dBools();
                     if (shouldClickHDMIUI)
                     {
+                        InitConnect3dBools();
                         isHdmiOrDpOrVga = 0;
                         shouldConnect显示器1 = true;
                     }
                     break;
                 case "DP接口":
-                    InitConnect3dBools();
                     if (shouldClickDPUI)
                     {
+                        InitConnect3dBools();
                         isHdmiOrDpOrVga = 1;
                         shouldConnect显示器1 = true;
                     }
                     break;
                 case "VGA接口":
-                    InitConnect3dBools();
                     if (shouldClickVGAUI)
                     {
+                        InitConnect3dBools();
                         isHdmiOrDpOrVga = 2;
                         shouldConnect显示器1 = true;
                     }
                     break;
                 case "USB2.0":
-                    InitConnect3dBools();
                     if (shouldClickUSBUI)
                     {
+                        InitConnect3dBools();
                         if (isKeyboard)
                             shouldConnect键盘1 = true;
                         else
@@ -1277,25 +1290,23 @@ namespace Tianbo.Wang
                     }
                     break;
                 case "电源线":
-                    InitConnect3dBools();
                     if (shouldClick电源线UI)
                     {
+                        InitConnect3dBools();
                         shouldConnect电源1 = true;
                     }
                     break;
                 case "以太网接口":
-                    InitConnect3dBools();
                     if (shouldClick网线UI)
                     {
-
+                        InitConnect3dBools();
                         shouldConnect网线1 = true;
                     }
                     break;
                 case "3.5毫米音频接口":
-                    InitConnect3dBools();
                     if (shouldClick音频线UI)
                     {
-
+                        InitConnect3dBools();
                         shouldConnect音响1 = true;
                     }
                     break;
@@ -1557,7 +1568,7 @@ namespace Tianbo.Wang
 
 
         #region 第二模块
-        void InitSecond()
+        public void InitSecond()
         {
             InitConnect3dBools();
 

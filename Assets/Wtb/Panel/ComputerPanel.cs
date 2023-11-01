@@ -32,6 +32,13 @@ namespace Tianbo.Wang
             }
             SceneGoManager.Instance.SwitctToComputer();
             BtnClickAction(0);
+
+            if (!GameManager.Instance.isStudyMode)
+            {
+                Wtb_TipsDialog wtb_TipsDialog = (Wtb_TipsDialog)Wtb_DialogManager.Instance.OpenDialog(Wtb_DialogType.Wtb_TipsDialog);
+                wtb_TipsDialog.SetTipsInfo("请认真选择，每次选择只有一次机会");
+            }
+
         }
 
         private void SetStepAction(string stepName)
@@ -142,6 +149,8 @@ namespace Tianbo.Wang
             }
             SceneGoManager.Instance.AddBagAction -= AddBagAction;
             SceneGoManager.Instance.SetStepAction -= SetStepAction;
+
+            SceneGoManager.Instance.InitSecond();
         }
 
     }

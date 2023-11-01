@@ -155,6 +155,8 @@ namespace Tianbo.Wang
 
             SceneGoManager.Instance.AddBagAction -= AddBagAction;
             SceneGoManager.Instance.SetStepAction -= ClearBagAction;
+
+            SceneGoManager.Instance.Init();
         }
 
     }
